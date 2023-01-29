@@ -30,11 +30,41 @@ class Item:
     infl_confusion: int
 
     def __str__(self):
-        return (f'Name: {self.name} \nKategorie: {self.category} \nBeschribig: {self.description} \n'
+        return (f'Name: {self.name} \nKategorie: {self.category_ch} \nBeschribig: {self.description} \n'
                 f'Pris: {str(self.price)} \nBenötigts Skill-Level: {str(self.req_skill_lv)} \nEffekt Masse: {str(self.infl_mass)}'
                 f'\nEffekt Gsundheit: {str(self.infl_health)} \nEffekt Stimmig: {str(self.infl_mood)} '
                 f'\nEffekt Hässigkeit: {str(self.infl_anger)} \nEffekt Langwiili: {str(self.infl_boredom)}'
                 f'\nEffekt Verwirrtheit: {str(self.infl_confusion)}')
+
+    @property
+    def category_ch(self):
+        aggressive = 'aggressiv-'
+        passive = 'passiv-'
+        active = 'aktiv-'
+        evil = 'sadistisch'
+        neutral = 'neutral'
+        chaotic = 'chaotisch'
+
+        if self.category == 'aggressive-evil':
+            return aggressive + evil
+        if self.category == 'aggressive-neutral':
+            return aggressive + neutral
+        if self.category == 'aggressive-chaotic':
+            return aggressive + chaotic
+        if self.category == 'passive-evil':
+            return passive + evil
+        if self.category == 'passive-neutral':
+            return passive + neutral
+        if self.category == 'passive-chaotic':
+            return passive + chaotic
+        if self.category == 'active-aggressive':
+            return active + aggressive
+        if self.category == 'active-neutral':
+            return active + neutral
+        if self.category == 'active-chaotic':
+            return active + chaotic
+        else:
+            return 'CATEGORY ERROR, check @property "category_ch" in class "Item"'
 
 
 handgun = Item('Colt M1911', 'aggressive-neutral', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
