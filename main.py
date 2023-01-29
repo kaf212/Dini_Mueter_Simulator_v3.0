@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 
+
 # GitHub account test
 # test II
 # test III
@@ -79,7 +80,6 @@ handgun = Item('Colt M1911', 'aggressive-neutral', 'E pistole halt', 20.0, 1, 0,
 grenade = Item('Mk.1 Splittergranate', 'aggressive-evil', 'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0, -50,
                -40, 40, -50, 0)
 rpg = Item('RPG-7', 'aggressive-chaotic', 'Nöd hine ineluege', 100.0, 2, -100, -100, -75, 50, -50, 0)
-
 
 all_items = [handgun, grenade, rpg]
 
@@ -169,7 +169,7 @@ def show_items(item_list, printed_properties):
             print(f'Nr. {str(item_list.index(item))}: {str(item.name)}  CHF {str(item.price)}')
         input()
     else:
-        print('ERROR: printed_properties parameter not correctly defined (show_items(), items.py)')
+        print('ERROR: printed_properties parameter not correctly defined (show_items())')
 
 
 def choose_item(item_list):
@@ -272,8 +272,6 @@ def invest():
         all_stocks.update(krypto)
         all_stocks.update(other)
 
-        print(f'DEBUGGING: {all_stocks}')
-
         investment_selection = input_selection(['a', 'k', 's'], ['Aktie', 'Krypto', 'andere Scheiss'],
                                                'I was wetsch du investiere? ')
         if investment_selection == 'a':
@@ -299,9 +297,9 @@ def buy_stock(stock_list):
             input(f"du häsch CHF {player.balance} uf dim Konto, das heisst du bisch z'broke. ")
         else:
             buy_confirmation = input_selection(['y', 'n'], ['Ja', 'Nei'],
-                                                'Bisch du dir sicher, dass du ' + str(stock_quantity) +
-                                                ' ' + selected_stock_key + ' für ' + str(
-                                                    total_stock_price) + ' chaufe wetsch? ')
+                                               'Bisch du dir sicher, dass du ' + str(stock_quantity) +
+                                               ' ' + selected_stock_key + ' für ' + str(
+                                                   total_stock_price) + ' chaufe wetsch? ')
             if buy_confirmation == 'y':
                 break
             if buy_confirmation == 'n':
@@ -309,8 +307,6 @@ def buy_stock(stock_list):
 
     for i in range(stock_quantity):
         player_stocks.append(selected_stock_key)
-
-    print(f'DEBUGGING: player_stocks = {player_stocks}')
 
     player.balance -= total_stock_price
 
@@ -322,8 +318,7 @@ def buy_stock(stock_list):
 
 def select_stock(stock_list):
     keys = list(stock_list.keys())
-    values = stock_list.values()
-    for key, value in zip(keys, values):
+    for key, value in stock_list.items():
         print(f'Nr.{keys.index(key)} {key}: CHF {value}')
 
     while True:
@@ -374,22 +369,22 @@ def sell_stock():
     selected_stock_quantity = stock_occurrences[selected_stock]
 
     while True:
-        sell_quantity = input_int('Wieviel ' + selected_stock + ' wetsch du verchaufe')
+        sell_quantity = input_int('Wieviel ' + selected_stock + ' wetsch du verchaufe? > ')
         if selected_stock_quantity < sell_quantity:
             print(f'Du häsch nume {selected_stock_quantity} {selected_stock}')
         else:
             total_selling_value = sell_quantity * selected_stock_value
             sell_confirmation = input_selection(['y', 'n'], ['Ja', 'Nei'],
                                                 'Bisch du dir sicher, dass du ' + str(sell_quantity) +
-                                                ' ' + selected_stock + ' für ' + str(total_selling_value) + ' verchaufe wetsch? ')
+                                                ' ' + selected_stock + ' für ' + str(
+                                                    total_selling_value) + ' verchaufe wetsch? ')
             if sell_confirmation == 'y':
                 break
             if sell_confirmation == 'n':
                 sell_stock()  # go back to selling terminal
 
     for i in range(sell_quantity):
-        index = player_stocks.index(selected_stock)
-        player_stocks.pop(index)
+        player_stocks.remove(selected_stock)
 
     player.balance += total_selling_value
 
@@ -442,11 +437,13 @@ def randomize_stock_values():
 
     return stocks, krypto, other
 
+
 # -------------- investing ------------------
 
 
 def heist():
-    heist_mode = input_selection(['a', 's', 'c'], ['Aggressiv', 'Stealth', 'Behindert'], 'Wie wetsch du de Überfall durefüehre?')
+    heist_mode = input_selection(['a', 's', 'c'], ['Aggressiv', 'Stealth', 'Behindert'],
+                                 'Wie wetsch du de Überfall durefüehre?')
     if heist_mode == 'a':
         pass
     if heist_mode == 's':
@@ -454,9 +451,11 @@ def heist():
     if heist_mode == 'c':
         pass
 
+
 # --------------------------------------------- bank ---------------------------------------------
 
 # --------------------------------------------- game -------------------------------------------
+
 
 from dataclasses import dataclass
 
@@ -735,17 +734,19 @@ def play_credits():
 
 
 def end_program(optional_message):
+    from datetime import datetime
+    now = datetime.now()
+    current_year = now.year
     if optional_message is not None:
         input(optional_message)
-        input('© 2023 Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
+        input(f'© {current_year} Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
         exit()
     else:
-        input('Danke dass du de Dini Mueter Simulator v3.0 gsillt häsch. ')
-        input('© 2023 Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
+        input('Danke, dass du de Dini Mueter Simulator v3.0 gsillt häsch. ')
+        input(f'© {current_year} Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
         exit()
 
 
 main()
-
 
 # ------------------------------------ main ----------------------------------------------------
