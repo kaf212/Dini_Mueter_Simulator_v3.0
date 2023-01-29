@@ -231,8 +231,14 @@ def buy_items():
     input('buy_items() is being executed')
     items_shop = all_items
     selected_item = choose_item(items_shop)
+    if selected_item.req_skill_lv > player.skill_lv:
+        print(f'{selected_item.name} verlangt Skill-Level {selected_item.req_skill_lv}')
+        input(f'Du bisch uf Level {player.skill_lv}, du Opfer. ')
+        shop()
+
     if selected_item.price > player.balance:
-        input("Du bisch z'broke zum das chaufe du Opfer, hau ab. ")
+        input(f'{selected_item.name} chostet {selected_item.price}, du häsch {player.balance}')
+        input("Das heisst du bisch z'broke zum das chaufe, hau ab! ")
         shop()
 
     if selected_item.price <= player.balance:
