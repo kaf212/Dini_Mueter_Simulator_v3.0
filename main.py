@@ -470,10 +470,10 @@ class DiniMueter:
     confusion: int
 
     def __str__(self):
-        return (f'Masse: {str(self.mass)}'
-                f'\nGsundheit: {str(self.health)} \nStimmig: {str(self.mood)} '
-                f'\nHässigkeit: {str(self.anger)} \nLangwiili: {str(self.boredom)}'
-                f'\nVerwirrtheit: {str(self.confusion)}')
+        return (f'Masse: {self.mass}'
+                f'\nGsundheit: {self.health} \nStimmig: {self.mood} '
+                f'\nHässigkeit: {self.anger} \nLangwiili: {self.boredom}'
+                f'\nVerwirrtheit: {self.confusion}')
 
 
 def initialize_dm():
@@ -495,12 +495,12 @@ def randomize_dm_properties():
     """
     input('randomize_dm_properties() is being executed')
     import random
-    dm_mass = random.randint(100, 500)
-    dm_health = random.randint(25, 100)
-    dm_mood = random.randint(25, 100)
-    dm_anger = random.randint(1, 100)
-    dm_boredom = random.randint(1, 100)
-    dm_confusion = random.randint(1, 100)
+    dm_mass = random.randint(100, 250)
+    dm_health = random.randint(40, 100)
+    dm_mood = random.randint(40, 100)
+    dm_anger = random.randint(1, 50)
+    dm_boredom = random.randint(1, 50)
+    dm_confusion = random.randint(1, 20)
 
     return dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion
 
@@ -559,8 +559,15 @@ def calculate_dm_prop_infl(dini_mueter, used_item):
     return dini_mueter
 
 
-def handle_critical_dm_property(message):
-    input(message)
+def handle_critical_dm_property(death_messages):
+    from random import randint
+
+    messages_count = 0
+    for i in death_messages:
+        messages_count += 1
+    message = death_messages[randint(0, messages_count - 1)]
+
+    input(message + ', rest in piss. ')
     user_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Neui Mueter Spawne?')
     if user_selection == 'y':
         game()
@@ -643,6 +650,7 @@ def shop():
 
 
 def game():
+
     user_selection = ''
     while user_selection != 'x':
         user_selection = input_selection(['t', 'x'], ['test', 'exit'], 'willkomme i de testumgäbig vom GAME')
@@ -661,18 +669,34 @@ def game():
                 dini_mueter = calculate_dm_prop_infl(dini_mueter, used_item=selected_item)
 
                 if dini_mueter.health <= 0:
-                    pass
+                    death_messages = ['Dini Mueter isch gstorbe', 'Dini mueter hät is Gras bisse',
+                                      'Dini Mueter isch verreckt',
+                                      "D'Existänz vo dinere mueter isch brutal beändet worde",
+                                      'Dini Mueter isch terminiert worde',
+                                      ]
+                    handle_critical_dm_property(death_messages)
 
                 elif dini_mueter.mood <= 0:
-                    pass
+                    death_messages = ['Dini Mueter hät sich umbracht', 'Dini Mueter hät sich erhängt',
+                                      'Dini Mueter hätt sich mit emne Toaster grilliert',
+                                      'Dini Mueter hät sich de Chopf mit Blei vollpumpt',
+                                      'Dini Mueter isch vonere Brugg gumbet',
+                                      'Dini Mueter hätt sich im zurüsee ertränkt'
+                                      ]
+                    handle_critical_dm_property(death_messages)
+
                 elif dini_mueter.mass <= 0:
-                    pass
+                    death_messages = ['Dini Mueter isch verfettet und amne Herzinfakt gtorbe', 'Dini Mueter isch zu fett worde und kollabiert',
+                                      'Dini Mueter isch so fett worde, sie isch en Berg abegrollt und gtorbe', 'Us dinere Mueter isch es schwarzes Loch entstande']
+                    handle_critical_dm_property(death_messages)
+
                 elif dini_mueter.anger >= 100:
-                    pass
+                    input('Dini Mueter isch ab jetzt huere hässig. ')
+                    # TODO: consequences for critical secondary DM properties
                 elif dini_mueter.boredom >= 100:
-                    pass
+                    input('Diniere Mueter isch es huere langwiilig. ')
                 elif dini_mueter.confusion >= 100:
-                    pass
+                    input('Dini Mueter isch hert verwirrt. ')
 
                 input('Enter drucke zum Status überprüefe')
                 show_dm_properties(dini_mueter, True, used_item=selected_item)
@@ -685,8 +709,6 @@ def game():
 
         if user_selection == 'x':
             main_menu()
-
-    pass
 
 
 def play_credits():
