@@ -172,45 +172,57 @@ def show_items(item_list, printed_properties):
         print('ERROR: printed_properties parameter not correctly defined (show_items())')
 
 
-def choose_item(item_list):
-    input('choose_item() is being executed')
-    user_top_level_selection = input_selection(['a', 'p', 'ak'], ['Aggressiv', 'Passiv', 'Aktiv'],
-                                               'Wähl dini Item-Übergruppe: ')
-    user_sub_level_selection = input_selection(['s', 'n', 'c'], ['Sadistisch', 'Neutral', 'Chaotisch'],
-                                               'Und jetzt wähl dini Item-Untergruppe: ')
-    if user_top_level_selection == 'a':
-        top_level_selection = 'aggressive'
-    if user_top_level_selection == 'p':
-        top_level_selection = 'passive'
-    if user_top_level_selection == 'c':
-        top_level_selection = 'active'
-
-    if user_sub_level_selection == 's':
-        sub_level_selection = 'evil'
-    if user_sub_level_selection == 'n':
-        sub_level_selection = 'neutral'
-    if user_sub_level_selection == 'c':
-        sub_level_selection = 'chaotic'
-
-    selection = top_level_selection + '-' + sub_level_selection
-
-    items_of_chosen_category = []
-    for item in item_list:
-        if item.category == selection:
-            items_of_chosen_category.append(item)
-
-    print(f'Du häsch {selection} als Kategorie gwält, wähl es Item us dere Kategorie: ')
-    for item in items_of_chosen_category:
-        print(f'Nr. {str(items_of_chosen_category.index(item))}: {item.name} ')
-
+def select_item(item_list):
     while True:
-        user_selection_index = input_int("Gib d'Artikelnummere vo dim gwünschte Item ih: ")
-        try:
-            selected_item = items_of_chosen_category[user_selection_index]
-        except IndexError:
-            print('Das Item existiert nöd, du dubbel')
+        top_level_selection = None
+        sub_level_selection = None
+        input('select_item() is being executed')
+        user_top_level_selection = input_selection(['a', 'p', 'ak'], ['Aggressiv', 'Passiv', 'Aktiv'],
+                                                   'Wähl dini Item-Übergruppe: ')
+        user_sub_level_selection = input_selection(['s', 'n', 'c'], ['Sadistisch', 'Neutral', 'Chaotisch'],
+                                                   'Und jetzt wähl dini Item-Untergruppe: ')
+        if user_top_level_selection == 'a':
+            top_level_selection = 'aggressive'
+        if user_top_level_selection == 'p':
+            top_level_selection = 'passive'
+        if user_top_level_selection == 'c':
+            top_level_selection = 'active'
+
+        if user_sub_level_selection == 's':
+            sub_level_selection = 'evil'
+        if user_sub_level_selection == 'n':
+            sub_level_selection = 'neutral'
+        if user_sub_level_selection == 'c':
+            sub_level_selection = 'chaotic'
+
+        # just an unnecessary validation to make PyCharm happy
+        if top_level_selection and sub_level_selection is not None:
+            selection = top_level_selection + '-' + sub_level_selection
         else:
-            break
+            selection = None  # again, just to get rid of undefined warnings
+
+        items_of_chosen_category = []
+        for item in item_list:
+            if item.category == selection:
+                items_of_chosen_category.append(item)
+
+        if not items_of_chosen_category:
+            input('Du bsitzisch keis Item us dere Kategorie. ')
+            continue
+
+        print(f'Du häsch {selection} als Kategorie gwält, wähl es Item us dere Kategorie: ')
+        for item in items_of_chosen_category:
+            print(f'Nr. {str(items_of_chosen_category.index(item))}: {item.name} ')
+
+        while True:
+            user_selection_index = input_int("Gib d'Artikelnummere vo dim gwünschte Item ih: ")
+            try:
+                selected_item = items_of_chosen_category[user_selection_index]
+            except IndexError:
+                print('Das Item existiert nöd, du dubbel')
+            else:
+                break
+        break
 
     return selected_item
 
@@ -238,7 +250,7 @@ def show_player_inventory():
 def buy_items():
     input('buy_items() is being executed')
     items_shop = all_items
-    selected_item = choose_item(items_shop)
+    selected_item = select_item(items_shop)
     if selected_item.req_skill_lv > player.skill_lv:
         print(f'{selected_item.name} verlangt Skill-Level {selected_item.req_skill_lv}')
         input(f'Du bisch uf Level {player.skill_lv}, du Opfer. ')
@@ -663,7 +675,7 @@ def game():
 
                 show_dm_properties(dini_mueter, False, used_item=None)
                 print('Was wetsch du uf sie ahwände? ')
-                selected_item = choose_item(player_inventory)
+                selected_item = select_item(player_inventory)
                 print(f'Du wändisch {selected_item.name} ah')
 
                 dini_mueter = calculate_dm_prop_infl(dini_mueter, used_item=selected_item)
