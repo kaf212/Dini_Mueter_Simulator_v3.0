@@ -7,6 +7,7 @@ from dataclasses import dataclass
 # test III
 # test IV
 # test V
+# test VI
 
 
 @dataclass
