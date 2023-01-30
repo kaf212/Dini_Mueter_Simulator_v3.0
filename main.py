@@ -42,41 +42,29 @@ class Item:
 
     @property
     def category_ch(self):
-        aggressive = 'aggressiv-'
-        passive = 'passiv-'
-        active = 'aktiv-'
-        evil = 'sadistisch'
-        neutral = 'neutral'
-        chaotic = 'chaotisch'
+        translations = {'handgun': 'Pistole',
+                        'assault rifle': 'Sturmgwehr',
+                        'anti tank': 'Panzerabwehr',
+                        'explosive': 'Sprängstoff'
+                        }
 
-        if self.category == 'aggressive-evil':
-            return aggressive + evil
-        if self.category == 'aggressive-neutral':
-            return aggressive + neutral
-        if self.category == 'aggressive-chaotic':
-            return aggressive + chaotic
-        if self.category == 'passive-evil':
-            return passive + evil
-        if self.category == 'passive-neutral':
-            return passive + neutral
-        if self.category == 'passive-chaotic':
-            return passive + chaotic
-        if self.category == 'active-aggressive':
-            return active + aggressive
-        if self.category == 'active-neutral':
-            return active + neutral
-        if self.category == 'active-chaotic':
-            return active + chaotic
+        try:
+            translation = translations[self.category]
+        except KeyError:
+            input('ERROR: Item category translation not registered in category_ch()')
         else:
-            return 'CATEGORY ERROR, check @property "category_ch" in class "Item"'
+            return translation
 
 
-handgun = Item('Colt M1911', 'aggressive-neutral', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
-grenade = Item('Mk.1 Splittergranate', 'aggressive-evil', 'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0, -50,
-               -40, 40, -50, 0)
-rpg = Item('RPG-7', 'aggressive-chaotic', 'Nöd hine ineluege', 100.0, 2, -100, -100, -75, 50, -50, 0)
+item_colt_m1911 = Item('Colt M1911', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
+item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0,
+                             -50,
+                             -40, 40, -50, 0)
+item_rpg_7 = Item('RPG-7', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
+item_m16a1 = Item('M16A1', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0, infl_health=-15,
+                  infl_mood=-10, infl_anger=20, infl_boredom=0, infl_confusion=0)
 
-all_items = [handgun, grenade, rpg]
+all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1]
 
 # --------- item stuff ----------------
 
@@ -84,7 +72,7 @@ all_items = [handgun, grenade, rpg]
 
 
 player = Player(skill_lv=1, xp=90, balance=500.0)
-player_inventory = [handgun, rpg]
+player_inventory = [item_colt_m1911, item_rpg_7]
 player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
 
 
@@ -168,56 +156,40 @@ def show_items(item_list, printed_properties):
 
 
 def select_item(item_list):
+    item_categories = []
+    for item in item_list:
+        if item.category not in item_categories:
+            item_categories.append(item.category)
+
+    for category in item_categories:
+        print(f'Nr.{item_categories.index(category)}: {category}')
+
     while True:
-        top_level_selection = None
-        sub_level_selection = None
-        input('select_item() is being executed')
-        user_top_level_selection = input_selection(['a', 'p', 'ak'], ['Aggressiv', 'Passiv', 'Aktiv'],
-                                                   'Wähl dini Item-Übergruppe: ')
-        user_sub_level_selection = input_selection(['s', 'n', 'c'], ['Sadistisch', 'Neutral', 'Chaotisch'],
-                                                   'Und jetzt wähl dini Item-Untergruppe: ')
-        if user_top_level_selection == 'a':
-            top_level_selection = 'aggressive'
-        if user_top_level_selection == 'p':
-            top_level_selection = 'passive'
-        if user_top_level_selection == 'c':
-            top_level_selection = 'active'
-
-        if user_sub_level_selection == 's':
-            sub_level_selection = 'evil'
-        if user_sub_level_selection == 'n':
-            sub_level_selection = 'neutral'
-        if user_sub_level_selection == 'c':
-            sub_level_selection = 'chaotic'
-
-        # just an unnecessary validation to make PyCharm happy
-        if top_level_selection and sub_level_selection is not None:
-            selection = top_level_selection + '-' + sub_level_selection
+        user_category_number = input_int("Gib d'Nummere vo de Kategorie ih > ")
+        try:
+            chosen_category = item_categories[user_category_number]
+        except IndexError:
+            print('Die Kategorie existiert nöd, du Dubbel. ')
         else:
-            selection = None  # again, just to get rid of undefined warnings
+            break
 
-        items_of_chosen_category = []
-        for item in item_list:
-            if item.category == selection:
-                items_of_chosen_category.append(item)
+    items_of_chosen_category = []
+    for item in all_items:
+        if item.category == chosen_category:
+            items_of_chosen_category.append(item)
 
-        if not items_of_chosen_category:
-            input('Du bsitzisch keis Item us dere Kategorie. ')
-            continue
+    print(f'\n--- {chosen_category} ---')
+    for item in items_of_chosen_category:
+        print(f'Nr.{items_of_chosen_category.index(item)}: {item.name}')
 
-        print(f'Du häsch {selection} als Kategorie gwält, wähl es Item us dere Kategorie: ')
-        for item in items_of_chosen_category:
-            print(f'Nr. {str(items_of_chosen_category.index(item))}: {item.name} ')
-
-        while True:
-            user_selection_index = input_int("Gib d'Artikelnummere vo dim gwünschte Item ih: ")
-            try:
-                selected_item = items_of_chosen_category[user_selection_index]
-            except IndexError:
-                print('Das Item existiert nöd, du dubbel')
-            else:
-                break
-        break
+    while True:
+        user_item_number = input_int("Gib d'Nummere vom Item ih > ")
+        try:
+            selected_item = items_of_chosen_category[user_item_number]
+        except IndexError:
+            print('Das Item existiert nöd du schlaue. ')
+        else:
+            break
 
     return selected_item
 
@@ -264,7 +236,6 @@ def print_skill_lv_bar():
 
     for i in range(rest_of_bar_chars):
         print('o', end="")
-
 
 
 # -------------------------------------------- player ------------------------------------------
@@ -693,7 +664,6 @@ def shop():
 
 
 def game():
-
     user_selection = ''
     while user_selection != 'x':
         user_selection = input_selection(['t', 'x'], ['test', 'exit'], 'willkomme i de testumgäbig vom GAME')
@@ -729,8 +699,10 @@ def game():
                     handle_critical_dm_property(death_messages, player_xp_change=15)
 
                 elif dini_mueter.mass <= 0:
-                    death_messages = ['Dini Mueter isch verfettet und amne Herzinfakt gtorbe', 'Dini Mueter isch zu fett worde und kollabiert',
-                                      'Dini Mueter isch so fett worde, sie isch en Berg abegrollt und gtorbe', 'Us dinere Mueter isch es schwarzes Loch entstande']
+                    death_messages = ['Dini Mueter isch verfettet und amne Herzinfakt gtorbe',
+                                      'Dini Mueter isch zu fett worde und kollabiert',
+                                      'Dini Mueter isch so fett worde, sie isch en Berg abegrollt und gtorbe',
+                                      'Us dinere Mueter isch es schwarzes Loch entstande']
                     handle_critical_dm_property(death_messages, player_xp_change=10)
 
                 elif dini_mueter.anger >= 100:
@@ -813,5 +785,6 @@ def end_program(optional_message):
 
 
 main()
+# select_item_version_2(all_items)
 
 # ------------------------------------ main ----------------------------------------------------
