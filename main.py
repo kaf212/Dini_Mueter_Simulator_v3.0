@@ -15,6 +15,7 @@ from dataclasses import dataclass
 @dataclass
 class Player:
     skill_lv: int
+    xp: int
     balance: float
 
 
@@ -88,7 +89,7 @@ all_items = [handgun, grenade, rpg]
 # --------- player stuff --------
 
 
-player = Player(skill_lv=1, balance=500.0)
+player = Player(skill_lv=1, xp=90, balance=500.0)
 player_inventory = [handgun, rpg]
 player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
 
@@ -241,6 +242,35 @@ def show_player_inventory():
         if compactness == 'k':
             show_items(player_inventory, 'show only names')
     main_menu()
+
+
+def check_player_xp():
+    if player.xp >= 100:
+        player.xp -= 100
+        player.skill_lv += 1
+        print('\n-------------------- LEVEL UP --------------------')
+        print_skill_lv_bar()
+        print(f'\n            Du bisch jetzt uf Level {player.skill_lv}            ')
+        print('\n-------------------- LEVEL UP --------------------')
+        input()
+
+
+def print_skill_lv_bar():
+    total_bar_chars = 50
+    xp_percentage = player.xp * 100 / total_bar_chars
+    xp_chars = total_bar_chars * (xp_percentage / 200)
+    printed_xp_chars = 0
+    print(player.skill_lv, end="")
+    print(f'{player.skill_lv + 1:49d}')
+    for i in range(int(xp_chars)):
+        print('=', end="")
+        printed_xp_chars += 1
+
+    rest_of_bar_chars = 50 - printed_xp_chars
+
+    for i in range(rest_of_bar_chars):
+        print('o', end="")
+
 
 
 # -------------------------------------------- player ------------------------------------------
@@ -571,7 +601,7 @@ def calculate_dm_prop_infl(dini_mueter, used_item):
     return dini_mueter
 
 
-def handle_critical_dm_property(death_messages):
+def handle_critical_dm_property(death_messages, player_xp_change):
     from random import randint
 
     messages_count = 0
@@ -580,6 +610,13 @@ def handle_critical_dm_property(death_messages):
     message = death_messages[randint(0, messages_count - 1)]
 
     input(message + ', rest in piss. ')
+
+    if player_xp_change:
+        player.xp += player_xp_change
+        input(f'Du häsch {player_xp_change} XP becho. ')
+
+    check_player_xp()
+
     user_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Neui Mueter Spawne?')
     if user_selection == 'y':
         game()
@@ -686,7 +723,7 @@ def game():
                                       "D'Existänz vo dinere mueter isch brutal beändet worde",
                                       'Dini Mueter isch terminiert worde',
                                       ]
-                    handle_critical_dm_property(death_messages)
+                    handle_critical_dm_property(death_messages, player_xp_change=20)
 
                 elif dini_mueter.mood <= 0:
                     death_messages = ['Dini Mueter hät sich umbracht', 'Dini Mueter hät sich erhängt',
@@ -695,12 +732,12 @@ def game():
                                       'Dini Mueter isch vonere Brugg gumbet',
                                       'Dini Mueter hätt sich im zurüsee ertränkt'
                                       ]
-                    handle_critical_dm_property(death_messages)
+                    handle_critical_dm_property(death_messages, player_xp_change=15)
 
                 elif dini_mueter.mass <= 0:
                     death_messages = ['Dini Mueter isch verfettet und amne Herzinfakt gtorbe', 'Dini Mueter isch zu fett worde und kollabiert',
                                       'Dini Mueter isch so fett worde, sie isch en Berg abegrollt und gtorbe', 'Us dinere Mueter isch es schwarzes Loch entstande']
-                    handle_critical_dm_property(death_messages)
+                    handle_critical_dm_property(death_messages, player_xp_change=10)
 
                 elif dini_mueter.anger >= 100:
                     input('Dini Mueter isch ab jetzt huere hässig. ')
