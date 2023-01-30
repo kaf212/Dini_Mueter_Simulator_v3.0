@@ -45,15 +45,18 @@ class Item:
         translations = {'handgun': 'Pistole',
                         'assault rifle': 'Sturmgwehr',
                         'anti tank': 'Panzerabwehr',
-                        'explosive': 'Sprängstoff'
+                        'explosive': 'Sprängstoff',
+                        'rifle': 'Gwehr',
+                        'medical': 'Medizin'
                         }
 
         try:
             translation = translations[self.category]
         except KeyError:
             input('ERROR: Item category translation not registered in category_ch()')
-        else:
-            return translation
+            translation = 'TRANSLATION ERROR'
+
+        return translation
 
 
 item_colt_m1911 = Item('Colt M1911', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
@@ -62,9 +65,13 @@ item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'Tätscht und 
                              -40, 40, -50, 0)
 item_rpg_7 = Item('RPG-7', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
 item_m16a1 = Item('M16A1', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0, infl_health=-15,
-                  infl_mood=-10, infl_anger=20, infl_boredom=0, infl_confusion=0)
+                  infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
+item_m1_garand = Item('M1 Garand', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2, infl_mass=0, infl_health=-10,
+                      infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+item_medkit = Item('Medikit', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0, infl_health=30,
+                   infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
 
-all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1]
+all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_medkit]
 
 # --------- item stuff ----------------
 
@@ -214,9 +221,18 @@ def check_player_xp():
     if player.xp >= 100:
         player.xp -= 100
         player.skill_lv += 1
+
+        unlocked_items = []
+        for item in all_items:
+            if item.req_skill_lv == player.skill_lv:
+                unlocked_items.append(item)
+
         print('\n-------------------- LEVEL UP --------------------')
         print_skill_lv_bar()
         print(f'\n            Du bisch jetzt uf Level {player.skill_lv}            ')
+        print('\n       Folgendi Items häsch du freigschalte: ')
+        for item in unlocked_items:
+            print(item.name, end=", ")
         print('\n-------------------- LEVEL UP --------------------')
         input()
 
@@ -598,9 +614,9 @@ def main():
 
 
 def main_menu():
-    user_selection = input_selection(['g', 's', 'b', 'i', 'c', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Credits', 'Beände'],
-                                     '\nWohi wetsch du gah? ')
+    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'c', 'x'],
+                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Credits', 'Beände'],
+                                     '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
     if user_selection == 's':
@@ -609,6 +625,11 @@ def main_menu():
         bank()
     if user_selection == 'i':
         show_player_inventory()
+    if user_selection == 'l':
+        print_skill_lv_bar()
+        print()
+        input()
+        main_menu()   # I know, I know
     if user_selection == 'c':
         play_credits()
     if user_selection == 'x':
