@@ -35,7 +35,8 @@ class Item:
 
     def __str__(self):
         return (f'Name: {self.name} \nKategorie: {self.category_ch} \nBeschribig: {self.description} \n'
-                f'Pris: {str(self.price)} \nBenötigts Skill-Level: {str(self.req_skill_lv)} \nEffekt Masse: {str(self.infl_mass)}'
+                f'Pris: {str(self.price)} \nBenötigts Skill-Level: {str(self.req_skill_lv)} \nEffekt Masse: '
+                f'{str(self.infl_mass)}'
                 f'\nEffekt Gsundheit: {str(self.infl_health)} \nEffekt Stimmig: {str(self.infl_mood)} '
                 f'\nEffekt Hässigkeit: {str(self.infl_anger)} \nEffekt Langwiili: {str(self.infl_boredom)}'
                 f'\nEffekt Verwirrtheit: {str(self.infl_confusion)}')
@@ -66,8 +67,8 @@ item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'Tätscht und 
 item_rpg_7 = Item('RPG-7', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
 item_m16a1 = Item('M16A1', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0, infl_health=-15,
                   infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-item_m1_garand = Item('M1 Garand', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2, infl_mass=0, infl_health=-10,
-                      infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+item_m1_garand = Item('M1 Garand', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2, infl_mass=0,
+                      infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
 item_medkit = Item('Medikit', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0, infl_health=30,
                    infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
 
@@ -79,7 +80,7 @@ all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, ite
 
 
 player = Player(skill_lv=1, xp=90, balance=500.0)
-player_inventory = [item_colt_m1911, item_rpg_7]
+player_inventory = [item_colt_m1911, item_m16a1, item_rpg_7, item_medkit]
 player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
 
 
@@ -92,6 +93,8 @@ player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
 def input_selection(valid_selections, selection_names, prompt):
     """
     asks the user for yes or no with a given prompt as question.
+    :param selection_names:
+    :param valid_selections:
     :param prompt:
     :return user_input:
     """
@@ -165,8 +168,8 @@ def show_items(item_list, printed_properties):
 def select_item(item_list):
     item_categories = []
     for item in item_list:
-        if item.category not in item_categories:
-            item_categories.append(item.category)
+        if item.category_ch not in item_categories:
+            item_categories.append(item.category_ch)
 
     for category in item_categories:
         print(f'Nr.{item_categories.index(category)}: {category}')
@@ -182,7 +185,7 @@ def select_item(item_list):
 
     items_of_chosen_category = []
     for item in all_items:
-        if item.category == chosen_category:
+        if item.category_ch == chosen_category:
             items_of_chosen_category.append(item)
 
     print(f'\n--- {chosen_category} ---')
@@ -479,10 +482,6 @@ def heist():
 
 # --------------------------------------------- game -------------------------------------------
 
-
-from dataclasses import dataclass
-
-
 @dataclass
 class DiniMueter:
     mass: int
@@ -530,7 +529,7 @@ def randomize_dm_properties():
 
 def show_dm_properties(dini_mueter, show_influence, used_item):
     print()
-    if show_influence == True and used_item is not None:
+    if show_influence and used_item is not None:
         if used_item.infl_mass >= 0:
             print(f'Masse: {dini_mueter.mass} Kg  (+ {used_item.infl_mass})')
         else:
@@ -556,7 +555,7 @@ def show_dm_properties(dini_mueter, show_influence, used_item):
         else:
             print(f'Verwirrtheit: {dini_mueter.confusion} CP  ({used_item.infl_confusion})')
         input()
-    elif show_influence == False or used_item is None:
+    elif not show_influence or used_item is None:
         print(f'Masse: {dini_mueter.mass} Kg')
         print(f'Gsundheit: {dini_mueter.health} HP')
         print(f'Stimmig: {dini_mueter.mood} MP')
@@ -586,8 +585,10 @@ def handle_critical_dm_property(death_messages, player_xp_change):
     from random import randint
 
     messages_count = 0
-    for i in death_messages:
-        messages_count += 1
+    for message in death_messages:
+        if message:  # just to make PyCharm happy
+            messages_count += 1
+
     message = death_messages[randint(0, messages_count - 1)]
 
     input(message + ', rest in piss. ')
@@ -629,7 +630,7 @@ def main_menu():
         print_skill_lv_bar()
         print()
         input()
-        main_menu()   # I know, I know
+        main_menu()  # I know, I know
     if user_selection == 'c':
         play_credits()
     if user_selection == 'x':
