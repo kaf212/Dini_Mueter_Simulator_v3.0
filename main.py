@@ -22,6 +22,7 @@ class Player:
 @dataclass
 class Item:
     name: str
+    top_level_category: str
     category: str
     description: str
     price: float
@@ -46,7 +47,7 @@ class Item:
         translations = {'handgun': 'Pistole',
                         'assault rifle': 'Sturmgwehr',
                         'anti tank': 'Panzerabwehr',
-                        'explosive': 'Sprängstoff',
+                        'anti personnel': 'Anti-Persone',
                         'rifle': 'Gwehr',
                         'medical': 'Medizin'
                         }
@@ -59,20 +60,42 @@ class Item:
 
         return translation
 
+    @property
+    def top_level_category_ch(self):
+        translations = {'firearm': 'Schusswaffe',
+                        'explosive': 'Schprängstoff',
+                        'consumable': 'Konsummittel',
+                        'meme': 'Meme',
+                        }
 
-item_colt_m1911 = Item('Colt M1911', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
-item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0,
+        try:
+            translation = translations[self.top_level_category]
+        except KeyError:
+            input('ERROR: Item top_level_category translation not registered in category_ch()')
+            translation = 'TRANSLATION ERROR'
+
+        return translation
+
+
+item_colt_m1911 = Item('Colt M1911', 'firearm', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
+item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'anti personnel', 'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0,
                              -50,
                              -40, 40, -50, 0)
-item_rpg_7 = Item('RPG-7', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
-item_m16a1 = Item('M16A1', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0, infl_health=-15,
+item_rpg_7 = Item('RPG-7', 'explosive',  'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
+item_m16a1 = Item('M16A1', 'firearm',  'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0, infl_health=-15,
                   infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-item_m1_garand = Item('M1 Garand', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2, infl_mass=0,
+item_m1_garand = Item('M1 Garand', 'firearm',  'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2, infl_mass=0,
                       infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
-item_medkit = Item('Medikit', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0, infl_health=30,
+item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0, infl_health=30,
                    infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
 
 all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_medkit]
+
+# top-level item categories:
+    # firearms
+    # explosives
+    # consumables
+    # memes
 
 # --------- item stuff ----------------
 
@@ -165,30 +188,87 @@ def show_items(item_list, printed_properties):
         print('ERROR: printed_properties parameter not correctly defined (show_items())')
 
 
-def select_item(item_list):
-    item_categories = []
-    for item in item_list:
-        if item.category_ch not in item_categories:
-            item_categories.append(item.category_ch)
+# def select_item(item_list):
+#     item_categories = []
+#     for item in item_list:
+#         if item.category_ch not in item_categories:
+#             item_categories.append(item.category_ch)
+#
+#     for category in item_categories:
+#         print(f'Nr.{item_categories.index(category)}: {category}')
+#
+#     while True:
+#         user_category_number = input_int("Gib d'Nummere vo de Kategorie ih > ")
+#         try:
+#             chosen_category = item_categories[user_category_number]
+#         except IndexError:
+#             print('Die Kategorie existiert nöd, du Dubbel. ')
+#         else:
+#             break
+#
+#     items_of_chosen_category = []
+#     for item in all_items:
+#         if item.category_ch == chosen_category:
+#             items_of_chosen_category.append(item)
+#
+#     print(f'\n--- {chosen_category} ---')
+#     for item in items_of_chosen_category:
+#         print(f'Nr.{items_of_chosen_category.index(item)}: {item.name}')
+#
+#     while True:
+#         user_item_number = input_int("Gib d'Nummere vom Item ih > ")
+#         try:
+#             selected_item = items_of_chosen_category[user_item_number]
+#         except IndexError:
+#             print('Das Item existiert nöd du schlaue. ')
+#         else:
+#             break
+#
+#     return selected_item
 
-    for category in item_categories:
-        print(f'Nr.{item_categories.index(category)}: {category}')
+
+def select_item(item_list):
+    item_top_level_categories = []
+    for category in item_list:
+        if category.top_level_category_ch not in item_top_level_categories:
+            item_top_level_categories.append(category.top_level_category_ch)
+
+    for top_level_category in item_top_level_categories:
+        print(f'Nr.{item_top_level_categories.index(top_level_category)}: {top_level_category}')
 
     while True:
-        user_category_number = input_int("Gib d'Nummere vo de Kategorie ih > ")
+        user_category_number = input_int("Gib d'Nummere vo de Überkategorie ih > ")
         try:
-            chosen_category = item_categories[user_category_number]
+            chosen_top_level_category = item_top_level_categories[user_category_number]
         except IndexError:
             print('Die Kategorie existiert nöd, du Dubbel. ')
         else:
             break
 
+    categories = []
+    for item in all_items:
+        if item.top_level_category_ch == chosen_top_level_category and item.category_ch not in categories:
+            categories.append(item.category_ch)
+
+    print(f'\n--- {chosen_top_level_category} ---')
+    for category in categories:
+        print(f'Nr.{categories.index(category)}: {category}')
+
+    while True:
+        user_category_number = input_int("Gib d'Nummere vo de Kategorie ih > ")
+        try:
+            selected_category = categories[user_category_number]
+        except IndexError:
+            print('Die Kategorie existiert nöd du schlaue. ')
+        else:
+            break
+
     items_of_chosen_category = []
     for item in all_items:
-        if item.category_ch == chosen_category:
+        if item.category_ch == selected_category:
             items_of_chosen_category.append(item)
 
-    print(f'\n--- {chosen_category} ---')
+    print(f'\n--- {selected_category} ---')
     for item in items_of_chosen_category:
         print(f'Nr.{items_of_chosen_category.index(item)}: {item.name}')
 
@@ -202,6 +282,7 @@ def select_item(item_list):
             break
 
     return selected_item
+
 
 
 # --------------------------------------------- items ------------------------------------------
@@ -807,6 +888,5 @@ def end_program(optional_message):
 
 
 main()
-# select_item_version_2(all_items)
 
 # ------------------------------------ main ----------------------------------------------------
