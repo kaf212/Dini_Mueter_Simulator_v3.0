@@ -240,7 +240,7 @@ def select_item(item_list):
             break
 
     categories = []
-    for item in all_items:
+    for item in item_list:
         if item.top_level_category_ch == chosen_top_level_category and item.category_ch not in categories:
             categories.append(item.category_ch)
 
@@ -258,7 +258,7 @@ def select_item(item_list):
             break
 
     items_of_chosen_category = []
-    for item in all_items:
+    for item in item_list:
         if item.category_ch == selected_category:
             items_of_chosen_category.append(item)
 
