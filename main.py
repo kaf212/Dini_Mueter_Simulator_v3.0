@@ -78,24 +78,18 @@ class Item:
 
 
 item_colt_m1911 = Item('Colt M1911', 'firearm', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
-item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'anti personnel', 'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0,
-                             -50,
-                             -40, 40, -50, 0)
+item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'anti personnel',
+                             'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0, -50, -40, 40, -50, 0)
 item_rpg_7 = Item('RPG-7', 'explosive',  'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
-item_m16a1 = Item('M16A1', 'firearm',  'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0, infl_health=-15,
-                  infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-item_m1_garand = Item('M1 Garand', 'firearm',  'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2, infl_mass=0,
-                      infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
-item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0, infl_health=30,
-                   infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
+item_m16a1 = Item('M16A1', 'firearm',  'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0,
+                  infl_health=-15, infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
+item_m1_garand = Item('M1 Garand', 'firearm',  'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2,
+                      infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0,
+                   infl_health=30, infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
 
 all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_medkit]
 
-# top-level item categories:
-    # firearms
-    # explosives
-    # consumables
-    # memes
 
 # --------- item stuff ----------------
 
@@ -283,10 +277,9 @@ def select_item(item_list):
 
     return selected_item
 
-
-
 # --------------------------------------------- items ------------------------------------------
 # -------------------------------------------- player ------------------------------------------
+
 
 def show_player_inventory():
     input('show_player_inventory() is being executed')
