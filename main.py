@@ -330,6 +330,9 @@ def print_skill_lv_bar():
     for i in range(rest_of_bar_chars):
         print('o', end="")
 
+    xp_untill_level_up = 100 - player.xp
+    print(f'\n           XP bis zu Skill-Level {player.skill_lv + 1}:  {xp_untill_level_up}           ')
+
 
 # -------------------------------------------- player ------------------------------------------
 # --------------------------------------------- shop --------------------------------------------
