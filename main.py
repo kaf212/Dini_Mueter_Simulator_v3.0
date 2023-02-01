@@ -818,8 +818,16 @@ def game():
         if user_selection == 'x':
             main_menu()
 
+
 def enter_cheat_code():
-    cheat_codes = ['De Ryan isch fett']
+    cheat_codes = ['DERYANISCHFETT', 'SHREKISCHLIEBISHREKISCHLÄBE',]
+
+    user_cheat_code = input('Gib de Cheat Code ih (illegal) > ')
+
+    if user_cheat_code not in cheat_codes:
+        end_program('De Cheat Code gits nöd, du döfsch nüme spile')
+
+
 
 
 def play_credits():
