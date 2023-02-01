@@ -3,9 +3,6 @@
 from dataclasses import dataclass
 
 
-# messed up the commit message
-
-
 @dataclass
 class Player:
     skill_lv: int
@@ -44,13 +41,24 @@ class Item:
 
     @property
     def category_ch(self):
-        translations = {'handgun': 'Pistole',
-                        'assault rifle': 'Sturmgwehr',
-                        'anti tank': 'Panzerabwehr',
-                        'anti personnel': 'Anti-Persone',
-                        'rifle': 'Gwehr',
-                        'medical': 'Medizin'
-                        }
+        translations = {  # firearm
+            'handgun': 'Pistole',
+            'assault rifle': 'Sturmgwehr',
+            'rifle': 'Gwehr',
+
+            # explosive
+            'anti tank': 'Panzerabwehr',
+            'anti personnel': 'Anti-Persone',
+
+            # consumable
+            'medical': 'Medizin',
+
+            # videogame
+            'minecraft': 'Minecraft',
+
+            # meme
+
+        }
 
         try:
             translation = translations[self.category]
@@ -65,6 +73,7 @@ class Item:
         translations = {'firearm': 'Schusswaffe',
                         'explosive': 'Schprängstoff',
                         'consumable': 'Konsummittel',
+                        'videogame': 'Videospiel',
                         'meme': 'Meme',
                         }
 
@@ -100,10 +109,14 @@ item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', '', price=80.0, req_ski
                    infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15, infl_confusion=0)
 
 item_glock_17 = Item('Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
-                   infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+                     infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
 
 item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0,
                    infl_health=30, infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
+
+item_diamond_pickaxe = Item('Diamante Pickaxe', 'videogame', 'minecraft',
+                            'Alte, mit dem chasch fucking Obsidian abbaue', price=100.0, req_skill_lv=10, infl_mass=-50,
+                            infl_health=-50, infl_mood=-20, infl_anger=30, infl_boredom=0, infl_confusion=15)
 
 all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_medkit]
 
@@ -196,45 +209,6 @@ def show_items(item_list, printed_properties):
         input()
     else:
         print('ERROR: printed_properties parameter not correctly defined (show_items())')
-
-
-# def select_item(item_list):
-#     item_categories = []
-#     for item in item_list:
-#         if item.category_ch not in item_categories:
-#             item_categories.append(item.category_ch)
-#
-#     for category in item_categories:
-#         print(f'Nr.{item_categories.index(category)}: {category}')
-#
-#     while True:
-#         user_category_number = input_int("Gib d'Nummere vo de Kategorie ih > ")
-#         try:
-#             chosen_category = item_categories[user_category_number]
-#         except IndexError:
-#             print('Die Kategorie existiert nöd, du Dubbel. ')
-#         else:
-#             break
-#
-#     items_of_chosen_category = []
-#     for item in all_items:
-#         if item.category_ch == chosen_category:
-#             items_of_chosen_category.append(item)
-#
-#     print(f'\n--- {chosen_category} ---')
-#     for item in items_of_chosen_category:
-#         print(f'Nr.{items_of_chosen_category.index(item)}: {item.name}')
-#
-#     while True:
-#         user_item_number = input_int("Gib d'Nummere vom Item ih > ")
-#         try:
-#             selected_item = items_of_chosen_category[user_item_number]
-#         except IndexError:
-#             print('Das Item existiert nöd du schlaue. ')
-#         else:
-#             break
-#
-#     return selected_item
 
 
 def select_item(item_list):
@@ -709,9 +683,9 @@ def main():
 
 
 def main_menu():
-    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'c', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Credits', 'Beände'],
-                                     '\nWas wetsch du mache?  ')
+    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'ch', 'c', 'x'],
+                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Cheat Code igeh',
+                                      'Credits', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
     if user_selection == 's':
@@ -725,6 +699,9 @@ def main_menu():
         print()
         input()
         main_menu()  # I know, I know
+    if user_selection == 'ch':
+        pass
+        # TODO: cheat codes
     if user_selection == 'c':
         play_credits()
     if user_selection == 'x':
@@ -840,6 +817,9 @@ def game():
 
         if user_selection == 'x':
             main_menu()
+
+def enter_cheat_code():
+    cheat_codes = ['De Ryan isch fett']
 
 
 def play_credits():
