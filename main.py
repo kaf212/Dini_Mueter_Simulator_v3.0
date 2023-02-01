@@ -700,8 +700,7 @@ def main_menu():
         input()
         main_menu()  # I know, I know
     if user_selection == 'ch':
-        pass
-        # TODO: cheat codes
+        enter_cheat_code()
     if user_selection == 'c':
         play_credits()
     if user_selection == 'x':
@@ -820,14 +819,36 @@ def game():
 
 
 def enter_cheat_code():
-    cheat_codes = ['DERYANISCHFETT', 'SHREKISCHLIEBISHREKISCHLÄBE',]
+    cheat_codes = ['DERYANISCHFETT', 'SHREKISCHLIEBISHREKISCHLÄBE', '3.141592654', 'DINIFETTIMUETER', '420']
 
     user_cheat_code = input('Gib de Cheat Code ih (illegal) > ')
 
     if user_cheat_code not in cheat_codes:
         end_program('De Cheat Code gits nöd, du döfsch nüme spile')
 
+    if user_cheat_code == 'DERYANISCHFETT':
+        player.balance += 1000
+        input("Cheat Code aktiviert - Dim Konto sind CHF 1'000 guetgschribe worde. ")
 
+    if user_cheat_code == 'SHREKISCHLIEBISHREKISCHLÄBE':
+        player.xp += 10000
+        input("Du häsch 10'000 XP becho. ")
+        check_player_xp()
+
+    if user_cheat_code == '3.141592654':
+        for i in range(100):
+            player_stocks.append('Tesla')
+        input('Du häsch 100 Tesla Aktie becho. ')
+
+    if user_cheat_code == 'DINIFETTIMUETER':
+        pass
+
+    if user_cheat_code == '420':
+        for i in range(1000):
+            player_stocks.append('Weed')
+        input('Du häsch 1 Kg Weed becho. ')
+
+    main_menu()
 
 
 def play_credits():
