@@ -78,18 +78,34 @@ class Item:
 
 
 item_colt_m1911 = Item('Colt M1911', 'firearm', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
+
 item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'anti personnel',
                              'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0, -50, -40, 40, -50, 0)
-item_rpg_7 = Item('RPG-7', 'explosive',  'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
-item_m16a1 = Item('M16A1', 'firearm',  'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0,
+
+item_rpg_7 = Item('RPG-7', 'explosive', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
+
+item_m16a1 = Item('M16A1', 'firearm', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0,
                   infl_health=-15, infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-item_m1_garand = Item('M1 Garand', 'firearm',  'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2,
+
+item_m1_garand = Item('M1 Garand', 'firearm', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2,
                       infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+
+item_m24 = Item('M24', 'firearm', 'rifle', 'De Siech isch scheisse lut aber fäggt', price=50.0, req_skill_lv=3,
+                infl_mass=0, infl_health=-35, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
+
+item_kar98k = Item('Kar98k', 'firearm', 'rifle', 'Gar nöd eso churz', price=75.0, req_skill_lv=4,
+                   infl_mass=0, infl_health=-25, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
+
+item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', '', price=80.0, req_skill_lv=4,
+                   infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+
+item_glock_17 = Item('Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
+                   infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+
 item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0,
                    infl_health=30, infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
 
 all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_medkit]
-
 
 # --------- item stuff ----------------
 
@@ -276,6 +292,7 @@ def select_item(item_list):
             break
 
     return selected_item
+
 
 # --------------------------------------------- items ------------------------------------------
 # -------------------------------------------- player ------------------------------------------
