@@ -899,6 +899,7 @@ def play_credits():
     sleep(1)
     print('')
 
+    main_menu()
 
 def end_program(optional_message):
     from datetime import datetime
@@ -914,8 +915,6 @@ def end_program(optional_message):
         exit()
 
 
-player = Player(1, 1000, 50)
-
-check_player_xp()
+main()
 
 # ------------------------------------ main ----------------------------------------------------
