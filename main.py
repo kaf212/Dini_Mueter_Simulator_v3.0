@@ -292,7 +292,7 @@ def check_player_xp():
 
         unlocked_items = []
         for item in all_items:
-            if item.req_skill_lv == player.skill_lv:
+            if item.req_skill_lv >= player.skill_lv:
                 unlocked_items.append(item)
 
         print('\n-------------------- LEVEL UP --------------------')
@@ -306,6 +306,11 @@ def check_player_xp():
 
 
 def print_skill_lv_bar():
+    while player.xp >= 100:
+        if player.xp >= 100:
+            player.xp -= 100
+            player.skill_lv += 1
+
     total_bar_chars = 50
     xp_percentage = player.xp * 100 / total_bar_chars
     xp_chars = total_bar_chars * (xp_percentage / 200)
@@ -909,6 +914,8 @@ def end_program(optional_message):
         exit()
 
 
-main()
+player = Player(1, 1000, 50)
+
+check_player_xp()
 
 # ------------------------------------ main ----------------------------------------------------
