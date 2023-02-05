@@ -105,7 +105,8 @@ item_m24 = Item('M24', 'firearm', 'rifle', 'De Siech isch scheisse lut aber fäg
 item_kar98k = Item('Kar98k', 'firearm', 'rifle', 'Gar nöd eso churz', price=75.0, req_skill_lv=4,
                    infl_mass=0, infl_health=-25, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
 
-item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', '', price=80.0, req_skill_lv=4,
+item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', 'PLACEHOLDER', price=80.0, req_skill_lv=4,
+                   # TODO: add description for StG 44
                    infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15, infl_confusion=0)
 
 item_glock_17 = Item('Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
@@ -541,14 +542,84 @@ def randomize_stock_values():
 
 
 def heist():
-    heist_mode = input_selection(['a', 's', 'c'], ['Aggressiv', 'Stealth', 'Behindert'],
+    heist_mode = input_selection(['a', 's', 'c'], ['Aggressiv', 'Stealth', 'Chaotisch'],
                                  'Wie wetsch du de Überfall durefüehre?')
     if heist_mode == 'a':
-        pass
+        success_chance = heist_preparation('a')
     if heist_mode == 's':
-        pass
+        success_chance = heist_preparation('s')
     if heist_mode == 'c':
-        pass
+        success_chance = heist_preparation('c')
+
+
+def heist_preparation(heist_mode):
+    allowed_items = []
+    if heist_mode == 'a':
+        allowed_categories = ['rifle', 'assault rifle']
+        for item in all_items:
+            if item in player_inventory and (item.category in allowed_categories or item.top_level_category == 'explosive'):
+                allowed_items.append(item)
+
+        print()
+        input('Du häsch dich dezue entschide, de Überfall aggressiv durezfüehre.')
+        input("Was für Items wetsch für de überfall opfere? (je höcher s'Level vom Item, desto besser dini Chance.) ")
+
+    if heist_mode == 's':
+        allowed_categories = ['handgun']
+
+        for item in all_items:
+            if item in player_inventory and (item.category in allowed_categories):
+                allowed_items.append(item)
+
+        print()
+        input('Du häsch dich dezue entschide, de Überfall Stealthig durezfüehre.')
+        input("Was für Items wetsch für de überfall opfere? (je höcher s'Level vom Item, desto besser dini Chance.) ")
+
+    if heist_mode == 'c':
+        allowed_categories = ['meme']
+
+        for item in all_items:
+            if item in player_inventory and (item.category in allowed_categories):
+                allowed_items.append(item)
+
+        if not allowed_items:
+            input('Du bsitzisch keis erlaubts Item für die Überfallsart. ')
+            heist()
+
+        print()
+        input('Du häsch dich dezue entschide, de Überfall Chaotisch durezfüehre.')
+        input("Was für Items wetsch für de überfall opfere? (je höcher s'Level vom Item, desto besser dini Chance.) ")
+
+
+    heist_items = []
+    while True:
+        selected_item = select_item(allowed_items)
+        player_inventory.remove(selected_item)
+        allowed_items.remove(selected_item)
+        heist_items.append(selected_item)
+        continue_item_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Wetsch du witeri Items mitneh? ')
+        if continue_item_selection == 'n':
+            break
+        if not allowed_items:
+            input('Du häsch kei vverfüegbari Items meh zum mitneh. ')
+            break
+
+    print()
+    print('Folgendi Items opferisch du für de Heist: ')
+    for item in heist_items:
+        print(f'{item.name}  -  Level {item.req_skill_lv}')
+
+    heist_items_quantity = 0
+    heist_items_level_sum = 0
+    for item in heist_items:
+        heist_items_quantity += 1
+        heist_items_level_sum += item.req_skill_lv
+
+    success_chance_percent = heist_items_level_sum * heist_items_quantity
+
+    print(f'DEBUGGING: Succes chance = {success_chance_percent} %')
+
+    return success_chance_percent
 
 
 # --------------------------------------------- bank ---------------------------------------------
@@ -901,6 +972,7 @@ def play_credits():
 
     main_menu()
 
+
 def end_program(optional_message):
     from datetime import datetime
     now = datetime.now()
@@ -915,6 +987,6 @@ def end_program(optional_message):
         exit()
 
 
-main()
+heist()
 
 # ------------------------------------ main ----------------------------------------------------
