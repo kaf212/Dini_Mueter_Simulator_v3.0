@@ -119,7 +119,7 @@ item_diamond_pickaxe = Item('Diamante Pickaxe', 'videogame', 'minecraft',
                             'Alte, mit dem chasch fucking Obsidian abbaue', price=100.0, req_skill_lv=10, infl_mass=-50,
                             infl_health=-50, infl_mood=-20, infl_anger=30, infl_boredom=0, infl_confusion=15)
 
-all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_medkit]
+all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand, item_m24, item_kar98k, item_stg_44, item_glock_17, item_medkit, item_diamond_pickaxe]
 
 # --------- item stuff ----------------
 
@@ -295,7 +295,7 @@ def check_player_xp():
 
         unlocked_items = []
         for item in all_items:
-            if item.req_skill_lv >= player.skill_lv:
+            if item.req_skill_lv <= player.skill_lv:
                 unlocked_items.append(item)
 
         print('\n-------------------- LEVEL UP --------------------')
