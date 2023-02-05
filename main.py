@@ -288,8 +288,10 @@ def show_player_inventory():
 
 def check_player_xp():
     if player.xp >= 100:
-        player.xp -= 100
-        player.skill_lv += 1
+        gained_levels = player.xp / 100
+        gained_levels = int(gained_levels)
+        player.xp -= gained_levels * 100
+        player.skill_lv += gained_levels
 
         unlocked_items = []
         for item in all_items:
