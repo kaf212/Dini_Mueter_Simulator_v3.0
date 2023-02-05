@@ -1,5 +1,5 @@
 # --------------------------------------- global resources -----------------------------------------------
-
+from random import randint
 from dataclasses import dataclass
 
 
@@ -519,7 +519,6 @@ def count_stocks(stock_list):
 
 
 def randomize_stock_values():
-    from random import randint
     stocks = {'Tesla': randint(100, 150),
               'Microsoft': randint(250, 300),
               'Gamestop': randint(5, 100)
@@ -546,10 +545,31 @@ def heist():
                                  'Wie wetsch du de Überfall durefüehre?')
     if heist_mode == 'a':
         success_chance = heist_preparation('a')
-    if heist_mode == 's':
+    elif heist_mode == 's':
         success_chance = heist_preparation('s')
-    if heist_mode == 'c':
+    elif heist_mode == 'c':
         success_chance = heist_preparation('c')
+    else:
+        success_chance = None
+
+    heist_success = evaluate_heist_success(success_chance)
+    if heist_success:
+        reward = randint(500, 10000)
+        player.balance += reward
+        input(f'Din Überfall isch erfolgrich gsi und du häsch CHF {reward} gchlaut. ')
+    else:
+        input("Du häsch din Überfall schlimm verkackt, häsch aber chöne abhaue. ")
+
+
+def evaluate_heist_success(success_chance):
+    random = randint(1, 100)
+    success_array = list(range(1, success_chance))
+    if random in success_array:
+        heist_success = True
+    else:
+        heist_success = False
+
+    return heist_success
 
 
 def heist_preparation(heist_mode):
@@ -589,7 +609,6 @@ def heist_preparation(heist_mode):
         print()
         input('Du häsch dich dezue entschide, de Überfall Chaotisch durezfüehre.')
         input("Was für Items wetsch für de überfall opfere? (je höcher s'Level vom Item, desto besser dini Chance.) ")
-
 
     heist_items = []
     while True:
@@ -726,7 +745,6 @@ def calculate_dm_prop_infl(dini_mueter, used_item):
 
 
 def handle_critical_dm_property(death_messages, player_xp_change):
-    from random import randint
 
     messages_count = 0
     for message in death_messages:
@@ -801,9 +819,7 @@ def bank():
             invest()
 
         if user_selection == 'u':
-            # TODO: heist mechanic
-            input('Du raubsch d Bank us und chlausch 100 stutz')
-            player.balance += 100
+            heist()
 
         if user_selection == 'm':
             show_player_stocks()
@@ -987,6 +1003,6 @@ def end_program(optional_message):
         exit()
 
 
-heist()
+main()
 
 # ------------------------------------ main ----------------------------------------------------
