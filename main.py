@@ -193,7 +193,7 @@ def show_items(item_list, printed_properties):
     should be printed
     :return: none
     """
-    input('show_items() is being executed')
+    print('show_items() is being executed')
     if printed_properties == 'show all properties':
         for item in item_list:
             print('--------------------------')
@@ -274,7 +274,7 @@ def select_item(item_list):
 
 
 def show_player_inventory():
-    input('show_player_inventory() is being executed')
+    print('show_player_inventory() is being executed')
     compactness = ''
     while compactness != 'x':
         compactness = input_selection(['a', 'k', 'x'], ['Alli Eigeschafte', 'Kompakt', 'zrugg zum Hauptmenü'],
@@ -336,7 +336,7 @@ def print_skill_lv_bar():
 
 
 def buy_items():
-    input('buy_items() is being executed')
+    print('buy_items() is being executed')
     items_shop = all_items
     selected_item = select_item(items_shop)
     if selected_item.req_skill_lv > player.skill_lv:
@@ -577,7 +577,8 @@ def heist_preparation(heist_mode):
     if heist_mode == 'a':
         allowed_categories = ['rifle', 'assault rifle']
         for item in all_items:
-            if item in player_inventory and (item.category in allowed_categories or item.top_level_category == 'explosive'):
+            if item in player_inventory and (item.category in allowed_categories
+                                             or item.top_level_category == 'explosive'):
                 allowed_items.append(item)
 
         print()
@@ -627,7 +628,7 @@ def heist_preparation(heist_mode):
     print('Folgendi Items opferisch du für de Heist: ')
     for item in heist_items:
         print(f'{item.name}  -  Level {item.req_skill_lv}')
-
+    input()
     heist_items_quantity = 0
     heist_items_level_sum = 0
     for item in heist_items:
@@ -636,7 +637,10 @@ def heist_preparation(heist_mode):
 
     success_chance_percent = heist_items_level_sum * heist_items_quantity
 
-    print(f'DEBUGGING: Succes chance = {success_chance_percent} %')
+    print(f'Dini momentani Erfolgschance lit bi {success_chance_percent} %. ')
+    confirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Wetsch du de Überfall würklich durefüehre? ')
+    if confirmation == 'n':
+        bank()
 
     return success_chance_percent
 
@@ -666,7 +670,7 @@ def initialize_dm():
     initializes all DM properties to a random value in given intervals
     :return:
     """
-    input('initialize_dm() is being executed')
+    print('initialize_dm() is being executed')
     dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion = randomize_dm_properties()
     new_dini_mueter = DiniMueter(dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion)
 
@@ -678,7 +682,7 @@ def randomize_dm_properties():
     randomizes DM properties on an given interval
     :return dm properties:
     """
-    input('randomize_dm_properties() is being executed')
+    print('randomize_dm_properties() is being executed')
     import random
     dm_mass = random.randint(100, 250)
     dm_health = random.randint(40, 100)
