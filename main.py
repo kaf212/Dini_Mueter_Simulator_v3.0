@@ -3,12 +3,6 @@ from random import randint
 from dataclasses import dataclass
 
 
-@dataclass
-class Player:
-    skill_lv: int
-    xp: int
-    balance: float
-
 
 # --------- item stuff ----------------
 
@@ -135,6 +129,12 @@ all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, ite
 
 # --------- player stuff --------
 
+@dataclass
+class Player:
+    skill_lv: int
+    xp: int
+    balance: float
+
 
 player = Player(skill_lv=1, xp=90, balance=500.0)
 player_inventory = [item_colt_m1911, item_m16a1, item_rpg_7, item_medkit]
@@ -142,6 +142,25 @@ player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
 
 
 # --------- player stuff ------
+
+# --------- achievement stuff ---------
+@dataclass
+class Achievement:
+    name: str
+    description: str
+    reward: float
+
+
+achievement_1 = Achievement('Mueter-Killer', 'Leg dini erschti Mueter um', 100.0)
+achievement_2 = Achievement('Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0)
+achievement_3 = Achievement('r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0)
+achievement_4 = Achievement('Kulturkänner', 'Chauf es Meme Item im Shop', 120.0)
+achievement_5 = Achievement('Dully', 'Wähl e inexistänti Option us', -20)
+
+all_achievements = [achievement_1, achievement_2, achievement_3, achievement_4,
+                    achievement_5]
+
+# --------- achievement stuff ---------
 
 
 # --------------------------------------- global resources -----------------------------------------------
