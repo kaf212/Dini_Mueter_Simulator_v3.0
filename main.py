@@ -57,6 +57,8 @@ class Item:
             'minecraft': 'Minecraft',
 
             # meme
+            'insider': 'Insider',
+            'classic': 'Klassiker'
 
         }
 
@@ -105,9 +107,8 @@ item_m24 = Item('M24', 'firearm', 'rifle', 'De Siech isch scheisse lut aber fäg
 item_kar98k = Item('Kar98k', 'firearm', 'rifle', 'Gar nöd eso churz', price=75.0, req_skill_lv=4,
                    infl_mass=0, infl_health=-25, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
 
-item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', 'PLACEHOLDER', price=80.0, req_skill_lv=4,
-                   # TODO: add description for StG 44
-                   infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', 'Ich han die imfall vergoldet in Battlefield V', price=80.0,
+                   req_skill_lv=4, infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15, infl_confusion=0)
 
 item_glock_17 = Item('Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
                      infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
@@ -118,9 +119,17 @@ item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', pri
 item_diamond_pickaxe = Item('Diamante Pickaxe', 'videogame', 'minecraft',
                             'Alte, mit dem chasch fucking Obsidian abbaue', price=100.0, req_skill_lv=10, infl_mass=-50,
                             infl_health=-50, infl_mood=-20, infl_anger=30, infl_boredom=0, infl_confusion=15)
+item_secret_firedragon = Item('De geheimi Fürdrache', 'meme', 'insider', 'Alte, er hätt de geheimi Fürdrache!',
+                              price=10000.0, req_skill_lv=100, infl_mass=0, infl_health=-200, infl_mood=-150, infl_anger=100,
+                              infl_boredom=-100, infl_confusion=100)
+item_horny_bat = Item('Anti-Hornig-Schleger', 'meme', 'classic', 'Gang is hornig-Gfängniss', price=20.0,
+                      req_skill_lv=4, infl_mass=0, infl_health=-5, infl_mood=-20, infl_anger=30,
+                      infl_boredom=0, infl_confusion=5)
+
 
 all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand,
-             item_m24, item_kar98k, item_stg_44, item_glock_17, item_medkit, item_diamond_pickaxe]
+             item_m24, item_kar98k, item_stg_44, item_glock_17, item_medkit, item_diamond_pickaxe,
+             item_secret_firedragon, item_horny_bat]
 
 # --------- item stuff ----------------
 
@@ -922,34 +931,41 @@ def game():
 
 
 def enter_cheat_code():
-    cheat_codes = ['DERYANISCHFETT', 'SHREKISCHLIEBISHREKISCHLÄBE', '3.141592654', 'DINIFETTIMUETER', '420']
 
     user_cheat_code = input('Gib de Cheat Code ih (illegal) > ')
-
-    if user_cheat_code not in cheat_codes:
-        end_program('De Cheat Code gits nöd, du döfsch nüme spile')
 
     if user_cheat_code == 'DERYANISCHFETT':
         player.balance += 1000
         input("Cheat Code aktiviert - Dim Konto sind CHF 1'000 guetgschribe worde. ")
 
-    if user_cheat_code == 'SHREKISCHLIEBISHREKISCHLÄBE':
+    elif user_cheat_code == 'SHREKISCHLIEBISHREKISCHLÄBE':
         player.xp += 10000
-        input("Du häsch 10'000 XP becho. ")
+        input("Cheat Code aktiviert - Du häsch 10'000 XP becho. ")
         check_player_xp()
 
-    if user_cheat_code == '3.141592654':
+    elif user_cheat_code == '3.141592654':
         for i in range(100):
             player_stocks.append('Tesla')
-        input('Du häsch 100 Tesla Aktie becho. ')
+        input('Cheat Code aktiviert - Du häsch 100 Tesla Aktie becho. ')
 
-    if user_cheat_code == 'DINIFETTIMUETER':
+    elif user_cheat_code == 'DINIFETTIMUETER':
         pass
 
-    if user_cheat_code == '420':
+    elif user_cheat_code == '420':
         for i in range(1000):
             player_stocks.append('Weed')
-        input('Du häsch 1 Kg Weed becho. ')
+        input('Cheat Code aktiviert - Du häsch 1 Kg Weed becho. ')
+
+    elif user_cheat_code == 'TRUPP26':
+        player_inventory.append(item_secret_firedragon)
+        input('Cheat Code aktiviert - Du häsch de geheimi Fürdrache becho!!!!!!!')
+
+    elif user_cheat_code == 'DEFYNNISCHENSPAST':
+        player.balance += 10
+        input('Cheat Code aktiviert - True dis, da häsch 10 Stutz. ')
+
+    else:
+        end_program('De Cheat Code gits nöd, du döfsch nüme spile. ')
 
     main_menu()
 
