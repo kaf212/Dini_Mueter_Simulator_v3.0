@@ -150,7 +150,7 @@ class Achievement:
     name: str
     description: str
     reward: float
-    time_earned: datetime
+    time_earned: datetime = datetime(1970, 1, 1, 12, 00)
 
     def __str__(self):
         pass
@@ -161,14 +161,14 @@ class Achievement:
         time_earned_formatted = datetime.strftime(self.time_earned, '%H:%M:%S')
         return time_earned_formatted
 
-test_achievement = Achievement('Test Achievement', 'En test du Dubbel', 1000000.0, datetime(1970, 1, 1, 12, 00))
-test_achievement_2 = Achievement('Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, datetime(1970, 1, 1, 12, 00))
-achievement_1 = Achievement('Mueter-Killer', 'Leg dini erschti Mueter um', 100.0, datetime(1970, 1, 1, 12, 00))
-achievement_2 = Achievement('Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0, datetime(1970, 1, 1, 12, 00))
-achievement_3 = Achievement('r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0, datetime(1970, 1, 1, 12, 00))
-achievement_4 = Achievement('Kulturkänner', 'Chauf es Meme Item im Shop', 120.0, datetime(1970, 1, 1, 12, 00))
-achievement_5 = Achievement('Dully', 'Wähl e inexistänti Option us', -20, datetime(1970, 1, 1, 12, 00))
 
+test_achievement = Achievement('Test Achievement', 'En test du Dubbel', 1000000.0)
+test_achievement_2 = Achievement('Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, )
+achievement_1 = Achievement('Mueter-Killer', 'Leg dini erschti Mueter um', 100.0)
+achievement_2 = Achievement('Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0)
+achievement_3 = Achievement('r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0)
+achievement_4 = Achievement('Kulturkänner', 'Chauf es Meme Item im Shop', 120.0)
+achievement_5 = Achievement('Dully', 'Wähl e inexistänti Option us', -20)
 all_achievements = [achievement_1, achievement_2, achievement_3, achievement_4,
                     achievement_5]
 
