@@ -1080,6 +1080,7 @@ def end_program(optional_message):
         input(f'© {current_year} Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
         exit()
 
-add_achievement(achievement_4)
-show_player_achievements()
+# add_achievement(achievement_4)
+# show_player_achievements()
+main()
 # ------------------------------------ main ----------------------------------------------------
