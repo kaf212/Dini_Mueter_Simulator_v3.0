@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 
-
 # --------- item stuff ----------------
 
 #  remove initialize_all_items (resources already globalized)  Done
@@ -103,7 +102,8 @@ item_kar98k = Item('Kar98k', 'firearm', 'rifle', 'Gar nöd eso churz', price=75.
                    infl_mass=0, infl_health=-25, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
 
 item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', 'Ich han die imfall vergoldet in Battlefield V', price=80.0,
-                   req_skill_lv=4, infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15, infl_confusion=0)
+                   req_skill_lv=4, infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15,
+                   infl_confusion=0)
 
 item_glock_17 = Item('Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
                      infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
@@ -115,16 +115,17 @@ item_diamond_pickaxe = Item('Diamante Pickaxe', 'videogame', 'minecraft',
                             'Alte, mit dem chasch fucking Obsidian abbaue', price=100.0, req_skill_lv=10, infl_mass=-50,
                             infl_health=-50, infl_mood=-20, infl_anger=30, infl_boredom=0, infl_confusion=15)
 item_secret_firedragon = Item('De geheimi Fürdrache', 'meme', 'insider', 'Alte, er hätt de geheimi Fürdrache!',
-                              price=10000.0, req_skill_lv=100, infl_mass=0, infl_health=-200, infl_mood=-150, infl_anger=100,
+                              price=10000.0, req_skill_lv=100, infl_mass=0, infl_health=-200, infl_mood=-150,
+                              infl_anger=100,
                               infl_boredom=-100, infl_confusion=100)
 item_horny_bat = Item('Anti-Hornig-Schleger', 'meme', 'classic', 'Gang is hornig-Gfängniss', price=20.0,
                       req_skill_lv=4, infl_mass=0, infl_health=-5, infl_mood=-20, infl_anger=30,
                       infl_boredom=0, infl_confusion=5)
 
-
 all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand,
              item_m24, item_kar98k, item_stg_44, item_glock_17, item_medkit, item_diamond_pickaxe,
              item_secret_firedragon, item_horny_bat]
+
 
 # --------- item stuff ----------------
 
@@ -153,8 +154,7 @@ class Achievement:
     time_earned: datetime = datetime(1970, 1, 1, 12, 00)
 
     def __str__(self):
-        pass
-        # TODO: create __str__ method for achievement
+        return f'-- {self.name} --\n{self.description}\nVerdient: {self.time_earned_formatted}\nCHF {self.reward}'
 
     @property
     def time_earned_formatted(self):
@@ -173,6 +173,7 @@ all_achievements = [achievement_1, achievement_2, achievement_3, achievement_4,
                     achievement_5]
 
 player_achievements = [test_achievement, test_achievement_2]
+
 
 # --------- achievement stuff ---------
 
@@ -391,6 +392,10 @@ def show_player_achievements():
 def add_achievement(achievement):
     achievement.time_earned = datetime.now()
     player_achievements.append(achievement)
+    print('---------------------')
+    print('  Neus Achievement! ')
+    print(achievement)
+    print('---------------------')
 
 
 # -------------------------------------------- achievements ------------------------------------------
@@ -812,7 +817,6 @@ def calculate_dm_prop_infl(dini_mueter, used_item):
 
 
 def handle_critical_dm_property(death_messages, player_xp_change):
-
     messages_count = 0
     for message in death_messages:
         if message:  # just to make PyCharm happy
@@ -869,7 +873,7 @@ def main_menu():
         if user_cofirmation == 'y':
             end_program(optional_message=None)
         else:
-            main_menu()   # ja, ja ich weiss gopfedammi
+            main_menu()  # ja, ja ich weiss gopfedammi
 
 
 def bank():
@@ -982,7 +986,6 @@ def game():
 
 
 def enter_cheat_code():
-
     user_cheat_code = input('Gib de Cheat Code ih (illegal) > ')
 
     if user_cheat_code == 'DERYANISCHFETT':
@@ -1080,7 +1083,7 @@ def end_program(optional_message):
         input(f'© {current_year} Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
         exit()
 
-# add_achievement(achievement_4)
+
+add_achievement(achievement_4)
 # show_player_achievements()
-main()
 # ------------------------------------ main ----------------------------------------------------
