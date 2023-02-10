@@ -82,6 +82,10 @@ class Item:
         return translation
 
 
+def initialize_items():
+    return
+
+
 item_colt_m1911 = Item('Colt M1911', 'firearm', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
 
 item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'anti personnel',
@@ -142,8 +146,40 @@ player = Player(skill_lv=1, xp=90, balance=500.0)
 player_inventory = [item_colt_m1911, item_m16a1, item_rpg_7, item_medkit]
 player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
 
-
 # --------- player stuff ------
+# --------- player data -------
+
+player_data_game = {'killed_mothers': 0,
+                    'damage_dealt': 0,
+                    }
+
+player_data_items = {'purchased_items_firearm': 0,
+                     'purchased_items_explosive': 0,
+                     'purchased_items_consumable': 0,
+                     'purchased_items_videogame': 0,
+                     'purchased_items_meme': 0
+                     }
+player_data_financial = {'total_spendings': 0,
+                         'total_earnings': 0,
+                         'purchased_stocks': 0,
+                         'purchased_crypto': 0
+                         }
+
+player_data_translations = {'killed_mothers': 'Killti Müetere',
+                            'damage_dealt': 'Verursachte Schade',
+
+                            'purchased_items_firearm': 'Gkaufti Schusswaffe',
+                            'purchased_items_explosive': 'Gkaufte Sprängstoff',
+                            'purchased_items_consumable': 'Gkaufti Konsumware',
+                            'purchased_items_videogame': 'Gkaufti Videospiel Items',
+                            'purchased_items_meme': 'Gkaufti Meme Items',
+
+                            'total_spendings': 'Usgabe total',
+                            'total_earnings': 'Ihname total',
+                            'purchased_stocks': 'Gkaufti Aktie',
+                            'purchased_crypto': 'Gkaufts Krypto'
+                            }
+
 
 # --------- achievement stuff ---------
 @dataclass
@@ -399,6 +435,29 @@ def add_achievement(achievement):
 
 
 # -------------------------------------------- achievements ------------------------------------------
+# -------------------------------------------- achievements ------------------------------------------
+def show_player_statistics():
+    user_selection = input_selection(['g', 'i', 'f'], ['Game Statistik', 'Item Statistik', 'Finanzielli Statistik'], 'Welli Statistik wetsch du ahluege?')
+    try:
+        if user_selection == 'g':
+            for key, value in player_data_game.items():
+                print(f'{player_data_translations[key]}: {value}')
+        if user_selection == 'i':
+            for key, value in player_data_items.items():
+                print(f'{player_data_translations[key]}: {value}')
+        if user_selection == 'f':
+            for key, value in player_data_financial.items():
+                print(f'{player_data_translations[key]}: {value}')
+            gross_profit = player_data_financial['total_earnings'] - player_data_financial['total_spendings']
+            gross_profti_ratio = gross_profit * 100 / player_data_financial['total_earnings']
+            print(f'\nBruttgwünn: CHF {gross_profit}\nBruttogwünnquote: {round(gross_profti_ratio, 2)}%')
+
+    except KeyError:
+        input('KeyError in show_player_statistics(), probably translation error. check player_data_translations for '
+              'debugging. ')
+    else:
+        pass
+# -------------------------------------------- achievements ------------------------------------------
 
 # --------------------------------------------- shop --------------------------------------------
 
@@ -420,13 +479,22 @@ def buy_items():
     if selected_item.price <= player.balance:
         player_inventory.append(selected_item)
         input(f'{selected_item.name} isch dim Inventar hinzuegfüegt worde. ')
-        player.balance -= selected_item.price
+        transact_money(selected_item.price)
         input(f'{selected_item.price} Stutz sind dim Konto abzoge worde. ')
 
 
 # --------------------------------------------- shop --------------------------------------------
 
 # --------------------------------------------- bank ---------------------------------------------
+# -------------- transaction ------------------
+def transact_money(amount):
+    player.balance += amount
+    if amount >= 0:
+        player_data_financial['total_earnings'] += amount
+    else:
+        player_data_financial['total_spendings'] -= amount  # total amount should be shown positive in statistics
+
+# -------------- transaction ------------------
 
 # -------------- investing ------------------
 
@@ -476,7 +544,7 @@ def buy_stock(stock_list):
     for i in range(stock_quantity):
         player_stocks.append(selected_stock_key)
 
-    player.balance -= total_stock_price
+    transact_money(total_stock_price)
 
     print(f'Du häsch {stock_quantity} {selected_stock_key} für je CHF {selected_stock_price} gkauft. ')
     input(f'Dim Konto sind CHF {total_stock_price} abzoge worde.')
@@ -554,7 +622,7 @@ def sell_stock():
     for i in range(sell_quantity):
         player_stocks.remove(selected_stock)
 
-    player.balance += total_selling_value
+    transact_money(total_selling_value)
 
     input(f'Du häsch {sell_quantity} {selected_stock} für je CHF {selected_stock_value} verchauft, ')
     input(f'dim Konto sind CHF {total_selling_value} guetgschribe worde. ')
@@ -623,7 +691,7 @@ def heist():
     heist_success = evaluate_heist_success(success_chance)
     if heist_success:
         reward = randint(500, 10000)
-        player.balance += reward
+        transact_money(reward)
         input(f'Din Überfall isch erfolgrich gsi und du häsch CHF {reward} gchlaut. ')
     else:
         input("Du häsch din Überfall schlimm verkackt, häsch aber chöne abhaue. ")
@@ -989,7 +1057,7 @@ def enter_cheat_code():
     user_cheat_code = input('Gib de Cheat Code ih (illegal) > ')
 
     if user_cheat_code == 'DERYANISCHFETT':
-        player.balance += 1000
+        transact_money(1000)
         input("Cheat Code aktiviert - Dim Konto sind CHF 1'000 guetgschribe worde. ")
 
     elif user_cheat_code == 'SHREKISCHLIEBISHREKISCHLÄBE':
@@ -1015,7 +1083,7 @@ def enter_cheat_code():
         input('Cheat Code aktiviert - Du häsch de geheimi Fürdrache becho!!!!!!!')
 
     elif user_cheat_code == 'DEFYNNISCHENSPAST':
-        player.balance += 10
+        transact_money(10)
         input('Cheat Code aktiviert - True dis, da häsch 10 Stutz. ')
 
     else:
@@ -1084,6 +1152,9 @@ def end_program(optional_message):
         exit()
 
 
-add_achievement(achievement_4)
+transact_money(-1000)
+transact_money(69)
+show_player_statistics()
+# add_achievement(achievement_4)
 # show_player_achievements()
 # ------------------------------------ main ----------------------------------------------------

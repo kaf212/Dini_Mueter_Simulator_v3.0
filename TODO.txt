@@ -1,0 +1,3 @@
+create initialize_items() function and find_item() function (to get rid of all the unique item variables)
+create other initialization functions
+create transact() function for money transaction for statistical reasons
