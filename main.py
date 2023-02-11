@@ -88,7 +88,8 @@ def initialize_items():
             Item('mk1_frag_grenade', 'Mk.1 Splittergranate', 'explosive', 'anti personnel',
                  'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0, -50, -40, 40, -50, 0),
             Item('rpg_7', 'RPG-7', 'explosive', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0),
-            Item('m16a1', 'M16A1', 'firearm', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0,
+            Item('m16a1', 'M16A1', 'firearm', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2,
+                 infl_mass=0,
                  infl_health=-15, infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0),
             Item('m1_garand', 'M1 Garand', 'firearm', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2,
                  infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0),
@@ -96,12 +97,14 @@ def initialize_items():
                  infl_mass=0, infl_health=-35, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0),
             Item('kar98k', 'Kar98k', 'firearm', 'rifle', 'Gar nöd eso churz', price=75.0, req_skill_lv=4,
                  infl_mass=0, infl_health=-25, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0),
-            Item('stg_44', 'StG 44', 'firearm', 'assault rifle', 'Ich han die imfall vergoldet in Battlefield V', price=80.0,
+            Item('stg_44', 'StG 44', 'firearm', 'assault rifle', 'Ich han die imfall vergoldet in Battlefield V',
+                 price=80.0,
                  req_skill_lv=4, infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15,
                  infl_confusion=0),
             Item('glock_17', 'Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
                  infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0),
-            Item('medkit', 'Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0,
+            Item('medkit', 'Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1,
+                 infl_mass=0,
                  infl_health=30, infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0),
             Item('diamond_pickaxe', 'Diamante Pickaxe', 'videogame', 'minecraft',
                  'Alte, mit dem chasch fucking Obsidian abbaue', price=100.0, req_skill_lv=10, infl_mass=-50,
@@ -193,7 +196,7 @@ def find_item(search_criteria, search_term_list):
     for found_item in found_items:
         found_items_quantity += 1
 
-    if found_items_quantity > 1:   # you have no idea how long it took me to come up with this fix
+    if found_items_quantity > 1:  # you have no idea how long it took me to come up with this fix
         return found_items
     if found_items_quantity == 1:
         return found_items[0]
@@ -252,6 +255,7 @@ player_data_translations = {'killed_mothers': 'Killti Müetere',
 # --------- achievement stuff ---------
 @dataclass
 class Achievement:
+    id: int
     name: str
     description: str
     reward: float
@@ -266,17 +270,45 @@ class Achievement:
         return time_earned_formatted
 
 
-test_achievement = Achievement('Test Achievement', 'En test du Dubbel', 1000000.0)
-test_achievement_2 = Achievement('Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, )
-achievement_1 = Achievement('Mueter-Killer', 'Leg dini erschti Mueter um', 100.0)
-achievement_2 = Achievement('Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0)
-achievement_3 = Achievement('r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0)
-achievement_4 = Achievement('Kulturkänner', 'Chauf es Meme Item im Shop', 120.0)
-achievement_5 = Achievement('Dully', 'Wähl e inexistänti Option us', -20)
-all_achievements = [achievement_1, achievement_2, achievement_3, achievement_4,
-                    achievement_5]
+def initialize_achievements():
+    return [Achievement(1, 'Test Achievement', 'En test du Dubbel', 1000000.0),
+            Achievement(2, 'Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, ),
+            Achievement(3, 'Mueter-Killer', 'Leg dini erschti Mueter um', 100.0),
+            Achievement(4, 'Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0),
+            Achievement(5, 'r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0),
+            Achievement(6, 'Kulturkänner', 'Chauf es Meme Item im Shop', 120.0),
+            Achievement(7, 'Dully', 'Wähl e inexistänti Option us', -20)
+            ]
 
-player_achievements = [test_achievement, test_achievement_2]
+
+all_achievements = initialize_achievements()
+
+player_achievements = []
+
+
+def find_achievement(id):
+    found_achievement = None
+    for achievement in all_achievements:
+        if achievement.id == id:
+            found_achievement = achievement
+
+    if found_achievement:
+        return found_achievement
+    else:
+        input('invalid achievement id')
+
+
+# test_achievement = Achievement('Test Achievement', 'En test du Dubbel', 1000000.0)
+# test_achievement_2 = Achievement('Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, )
+# achievement_1 = Achievement('Mueter-Killer', 'Leg dini erschti Mueter um', 100.0)
+# achievement_2 = Achievement('Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0)
+# achievement_3 = Achievement('r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0)
+# achievement_4 = Achievement('Kulturkänner', 'Chauf es Meme Item im Shop', 120.0)
+# achievement_5 = Achievement('Dully', 'Wähl e inexistänti Option us', -20)
+# all_achievements = [achievement_1, achievement_2, achievement_3, achievement_4,
+#                     achievement_5]
+
+# player_achievements = [test_achievement, test_achievement_2]
 
 
 # --------- achievement stuff ---------
@@ -484,13 +516,18 @@ def print_skill_lv_bar():
 # -------------------------------------------- player ------------------------------------------
 # -------------------------------------------- achievements ------------------------------------------
 def show_player_achievements():
-    for achievement in player_achievements:
-        print()
-        print(f'-- {achievement.name} -- ')
-        print(f'{achievement.description}')
-        print(f'Verdient: {achievement.time_earned_formatted}')
-        print(f'CHF {achievement.reward}')
-        input()
+    if player_achievements:
+        for achievement in player_achievements:
+            print()
+            print(f'-- {achievement.name} -- ')
+            print(f'{achievement.description}')
+            print(f'Verdient: {achievement.time_earned_formatted}')
+            print(f'CHF {achievement.reward}')
+            input()
+    else:
+        input('Du häsch no kei Achievements verdient, du Noob. ')
+
+    main_menu()
 
 
 def add_achievement(achievement):
@@ -988,8 +1025,8 @@ def main():
 
 
 def main_menu():
-    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'ch', 'c', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Cheat Code igeh',
+    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'ch', 'c', 'x'],
+                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements', 'Cheat Code igeh',
                                       'Credits', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
@@ -1004,6 +1041,8 @@ def main_menu():
         print()
         input()
         main_menu()  # I know, I know
+    if user_selection == 'a':
+        show_player_achievements()
     if user_selection == 'ch':
         enter_cheat_code()
     if user_selection == 'c':
