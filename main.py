@@ -555,14 +555,21 @@ def show_player_statistics():
             for key, value in player_data_financial.items():
                 print(f'{player_data_translations[key]}: {value}')
             gross_profit = player_data_financial['total_earnings'] - player_data_financial['total_spendings']
-            gross_profti_ratio = gross_profit * 100 / player_data_financial['total_earnings']
-            print(f'\nBruttgwünn: CHF {gross_profit}\nBruttogwünnquote: {round(gross_profti_ratio, 2)}%')
+            try:
+                gross_profti_ratio = gross_profit * 100 / player_data_financial['total_earnings']
+            except ZeroDivisionError:
+                gross_profti_ratio = 'N/A'
+                print(f'\nBruttgwünn: CHF {gross_profit}\nBruttogwünnquote: {gross_profti_ratio}')
+            else:
+                gross_profti_ratio = round(gross_profti_ratio, 2)
+                print(f'\nBruttgwünn: CHF {gross_profit}\nBruttogwünnquote: {gross_profti_ratio}%')
 
     except KeyError:
         input('KeyError in show_player_statistics(), probably translation error. check player_data_translations for '
               'debugging. ')
-    else:
-        pass
+
+    input()
+    main_menu()
 
 
 # -------------------------------------------- achievements ------------------------------------------
@@ -587,7 +594,7 @@ def buy_items():
     if selected_item.price <= player.balance:
         player_inventory.append(selected_item)
         input(f'{selected_item.name} isch dim Inventar hinzuegfüegt worde. ')
-        transact_money(selected_item.price)
+        transact_money(-selected_item.price)
         input(f'{selected_item.price} Stutz sind dim Konto abzoge worde. ')
 
 
@@ -653,10 +660,15 @@ def buy_stock(stock_list):
     for i in range(stock_quantity):
         player_stocks.append(selected_stock_key)
 
-    transact_money(total_stock_price)
+    transact_money(-total_stock_price)
 
     print(f'Du häsch {stock_quantity} {selected_stock_key} für je CHF {selected_stock_price} gkauft. ')
     input(f'Dim Konto sind CHF {total_stock_price} abzoge worde.')
+
+    if selected_stock_key in ['Microsoft', 'Tesla', 'Gamestop']:
+        player_data_financial['purchased_stocks'] += stock_quantity
+    if selected_stock_key in ['Bitcoin', 'Ethereum', 'Dogecoin']:  # permanent temporary solution
+        player_data_financial['purchased_crypto'] += stock_quantity
 
     bank()
 
@@ -1025,8 +1037,8 @@ def main():
 
 
 def main_menu():
-    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'ch', 'c', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements', 'Cheat Code igeh',
+    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
+                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements', 'Statistike', 'Cheat Code igeh',
                                       'Credits', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
@@ -1043,6 +1055,8 @@ def main_menu():
         main_menu()  # I know, I know
     if user_selection == 'a':
         show_player_achievements()
+    if user_selection == 'st':
+        show_player_statistics()
     if user_selection == 'ch':
         enter_cheat_code()
     if user_selection == 'c':
