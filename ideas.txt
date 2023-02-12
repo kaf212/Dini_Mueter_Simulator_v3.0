@@ -1,6 +1,5 @@
 --- Mechanics ---
 - challenges
-- achievements
 
 --- in-game mechanics ---
 

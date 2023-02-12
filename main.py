@@ -6,10 +6,6 @@ from datetime import datetime
 
 # --------- item stuff ----------------
 
-#  remove initialize_all_items (resources already globalized)  Done
-#  and make the program not shit itself due to its removal
-
-
 @dataclass
 class Item:
     id: str
@@ -120,50 +116,6 @@ def initialize_items():
             ]
 
 
-# item_colt_m1911 = Item('Colt M1911', 'firearm', 'handgun', 'E pistole halt', 20.0, 1, 0, -25, -25, 30, -40, 0)
-#
-# item_mk_1_handgrenade = Item('Mk.1 Splittergranate', 'explosive', 'anti personnel',
-#                              'Tätscht und verteilt Metall-Konfetti', 30.0, 1, 0, -50, -40, 40, -50, 0)
-#
-# item_rpg_7 = Item('RPG-7', 'explosive', 'anti tank', 'Nöd hine ineluege', 100.0, 3, -100, -50, -75, 50, -50, 0)
-#
-# item_m16a1 = Item('M16A1', 'firearm', 'assault rifle', 'Wahre Klassiker', price=45.0, req_skill_lv=2, infl_mass=0,
-#                   infl_health=-15, infl_mood=-10, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-#
-# item_m1_garand = Item('M1 Garand', 'firearm', 'rifle', 'Tönt kuul bim Nahlade', price=20.0, req_skill_lv=2,
-#                       infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
-#
-# item_m24 = Item('M24', 'firearm', 'rifle', 'De Siech isch scheisse lut aber fäggt', price=50.0, req_skill_lv=3,
-#                 infl_mass=0, infl_health=-35, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-#
-# item_kar98k = Item('Kar98k', 'firearm', 'rifle', 'Gar nöd eso churz', price=75.0, req_skill_lv=4,
-#                    infl_mass=0, infl_health=-25, infl_mood=-15, infl_anger=20, infl_boredom=-15, infl_confusion=0)
-#
-# item_stg_44 = Item('StG 44', 'firearm', 'assault rifle', 'Ich han die imfall vergoldet in Battlefield V', price=80.0,
-#                    req_skill_lv=4, infl_mass=0, infl_health=-20, infl_mood=-15, infl_anger=15, infl_boredom=-15,
-#                    infl_confusion=0)
-#
-# item_glock_17 = Item('Glock 17', 'firearm', 'handgun', "D'Öschis wüssed wies gaht", price=40.0, req_skill_lv=5,
-#                      infl_mass=0, infl_health=-10, infl_mood=-10, infl_anger=15, infl_boredom=-15, infl_confusion=0)
-#
-# item_medkit = Item('Medikit', 'consumable', 'medical', 'Universale Hälfer', price=10.0, req_skill_lv=1, infl_mass=0,
-#                    infl_health=30, infl_mood=20, infl_anger=-20, infl_boredom=0, infl_confusion=0)
-#
-# item_diamond_pickaxe = Item('Diamante Pickaxe', 'videogame', 'minecraft',
-#                             'Alte, mit dem chasch fucking Obsidian abbaue', price=100.0, req_skill_lv=10, infl_mass=-50,
-#                             infl_health=-50, infl_mood=-20, infl_anger=30, infl_boredom=0, infl_confusion=15)
-# item_secret_firedragon = Item('De geheimi Fürdrache', 'meme', 'insider', 'Alte, er hätt de geheimi Fürdrache!',
-#                               price=10000.0, req_skill_lv=100, infl_mass=0, infl_health=-200, infl_mood=-150,
-#   #                             infl_anger=100,
-#                               infl_boredom=-100, infl_confusion=100)
-# item_horny_bat = Item('Anti-Hornig-Schleger', 'meme', 'classic', 'Gang is hornig-Gfängniss', price=20.0,
-#                       req_skill_lv=4, infl_mass=0, infl_health=-5, infl_mood=-20, infl_anger=30,
-#                       infl_boredom=0, infl_confusion=5)
-
-# all_items = [item_colt_m1911, item_mk_1_handgrenade, item_rpg_7, item_m16a1, item_m1_garand,
-#              item_m24, item_kar98k, item_stg_44, item_glock_17, item_medkit, item_diamond_pickaxe,
-#              item_secret_firedragon, item_horny_bat]
-
 all_items = initialize_items()
 
 
@@ -230,6 +182,7 @@ player_data_items = {'purchased_items_firearm': 0,
                      'purchased_items_videogame': 0,
                      'purchased_items_meme': 0
                      }
+
 player_data_financial = {'total_spendings': 0,
                          'total_earnings': 0,
                          'purchased_stocks': 0,
@@ -298,24 +251,9 @@ def find_achievement(id):
         input('invalid achievement id')
 
 
-# test_achievement = Achievement('Test Achievement', 'En test du Dubbel', 1000000.0)
-# test_achievement_2 = Achievement('Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, )
-# achievement_1 = Achievement('Mueter-Killer', 'Leg dini erschti Mueter um', 100.0)
-# achievement_2 = Achievement('Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0)
-# achievement_3 = Achievement('r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0)
-# achievement_4 = Achievement('Kulturkänner', 'Chauf es Meme Item im Shop', 120.0)
-# achievement_5 = Achievement('Dully', 'Wähl e inexistänti Option us', -20)
-# all_achievements = [achievement_1, achievement_2, achievement_3, achievement_4,
-#                     achievement_5]
-
-# player_achievements = [test_achievement, test_achievement_2]
-
-
 # --------- achievement stuff ---------
-
-
 # --------------------------------------- global resources -----------------------------------------------
-# --------------------------------------------- inputs -------------------------------------------
+# --------------------------------------------- input -------------------------------------------
 
 def input_selection(valid_selections, selection_names, prompt):
     """
@@ -362,7 +300,7 @@ def input_float(prompt):
     return user_input
 
 
-# ----------------------------------------------- inputs ------------------------------------------------
+# ----------------------------------------------- input ------------------------------------------------
 # --------------------------------------------- items ------------------------------------------
 
 def show_items(item_list, printed_properties):
@@ -540,7 +478,7 @@ def add_achievement(achievement):
 
 
 # -------------------------------------------- achievements ------------------------------------------
-# -------------------------------------------- achievements ------------------------------------------
+# -------------------------------------------- statistics ------------------------------------------
 def show_player_statistics():
     user_selection = input_selection(['g', 'i', 'f'], ['Game Statistik', 'Item Statistik', 'Finanzielli Statistik'],
                                      'Welli Statistik wetsch du ahluege?')
@@ -572,7 +510,7 @@ def show_player_statistics():
     main_menu()
 
 
-# -------------------------------------------- achievements ------------------------------------------
+# -------------------------------------------- statistics ------------------------------------------
 
 # --------------------------------------------- shop --------------------------------------------
 
@@ -1038,7 +976,8 @@ def main():
 
 def main_menu():
     user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements', 'Statistike', 'Cheat Code igeh',
+                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements',
+                                      'Statistike', 'Cheat Code igeh',
                                       'Credits', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
@@ -1278,13 +1217,6 @@ def end_program(optional_message):
         exit()
 
 
-# transact_money(-1000)
-# transact_money(69)
-# show_player_statistics()
-# add_achievement(achievement_4)
-# show_player_achievements()
-# item = find_item('id', ['secret_firedragon'])
-# print(item)
 main()
 
 # ------------------------------------ main ----------------------------------------------------
