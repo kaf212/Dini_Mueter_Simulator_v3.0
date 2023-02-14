@@ -5,3 +5,5 @@ holy shit you just found out what you can do with classes, here's what you need 
   
 check this if you don't remember what I'm talking about:
   https://youtu.be/YbpKMIUjvK8?t=676
+  
+  raise Errors when something is wrong instead of just "input('error message')"
