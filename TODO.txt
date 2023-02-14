@@ -1,2 +1,5 @@
-
-create other initialization functions
+holy shit you just found out what you can do with classes, here's what you need to do:
+  - player inventory, achievements, stocks, statistics, everything related to the player belongs into that damn class.
+  - write functions INSIDE the class like add_item(), add_achievement(), transact(), add_xp(), EVERYTHING!
+  - everything related to dinimueter needs to go INSIDE the class, like randomize_dm_props() and shit
+  
