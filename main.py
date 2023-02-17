@@ -189,6 +189,10 @@ player_data_financial = {'total_spendings': 0,
                          'purchased_crypto': 0
                          }
 
+player_data_misc = {'invalid inputs': 0,
+                    'entered cheat codes': 0,
+                    }
+
 player_data_translations = {'killed_mothers': 'Killti Müetere',
                             'damage_dealt': 'Verursachte Schade',
 
@@ -205,6 +209,25 @@ player_data_translations = {'killed_mothers': 'Killti Müetere',
                             }
 
 
+def check_player_data():
+    input('check_player_data()')
+    if player_data_game['killed_mothers'] == 1:
+        add_achievement(3)
+    if player_data_financial['purchased_stocks'] == 1:
+        add_achievement(5)
+    if player_data_items['purchased_items_meme'] == 1:
+        add_achievement(6)
+
+    new_achievements_earned = False
+    for achievement in player_achievements:
+        if achievement.status == 'new':
+            new_achievements_earned = True
+
+    if new_achievements_earned:
+        show_player_achievements('new')
+
+
+
 # --------- achievement stuff ---------
 @dataclass
 class Achievement:
@@ -212,7 +235,9 @@ class Achievement:
     name: str
     description: str
     reward: float
+    status: str
     time_earned: datetime = datetime(1970, 1, 1, 12, 00)
+
 
     def __str__(self):
         return f'-- {self.name} --\n{self.description}\nVerdient: {self.time_earned_formatted}\nCHF {self.reward}'
@@ -222,15 +247,20 @@ class Achievement:
         time_earned_formatted = datetime.strftime(self.time_earned, '%H:%M:%S')
         return time_earned_formatted
 
+    # @property
+    # def status(self):
+    #     if self.status not in ['new', 'old', 'not earned']:
+    #         raise ValueError('Invalid Achievement Status')
+
 
 def initialize_achievements():
-    return [Achievement(1, 'Test Achievement', 'En test du Dubbel', 1000000.0),
-            Achievement(2, 'Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, ),
-            Achievement(3, 'Mueter-Killer', 'Leg dini erschti Mueter um', 100.0),
-            Achievement(4, 'Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0),
-            Achievement(5, 'r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0),
-            Achievement(6, 'Kulturkänner', 'Chauf es Meme Item im Shop', 120.0),
-            Achievement(7, 'Dully', 'Wähl e inexistänti Option us', -20)
+    return [Achievement(1, 'Test Achievement', 'En test du Dubbel', 1000000.0, status='not earned'),
+            Achievement(2, 'Test Achievement 2', 'De zweiti Test du Dubbel', 500000.0, status='not earned'),
+            Achievement(3, 'Mueter-Killer', 'Leg dini erschti Mueter um', 100.0, status='not earned'),
+            Achievement(4, 'Arschloch', 'Duen erfolgrich en Cheat code ihlöse', -50.0, status='not earned'),
+            Achievement(5, 'r/WallStreetBets Immigrant', 'Chauf en Aktie', 75.0, status='not earned'),
+            Achievement(6, 'Kulturkänner', 'Chauf es Meme Item im Shop', 120.0, status='not earned'),
+            Achievement(7, 'Dully', 'Wähl e inexistänti Option us', -20, status='not earned')
             ]
 
 
@@ -453,28 +483,47 @@ def print_skill_lv_bar():
 
 # -------------------------------------------- player ------------------------------------------
 # -------------------------------------------- achievements ------------------------------------------
-def show_player_achievements():
-    if player_achievements:
-        for achievement in player_achievements:
-            print()
-            print(f'-- {achievement.name} -- ')
-            print(f'{achievement.description}')
-            print(f'Verdient: {achievement.time_earned_formatted}')
-            print(f'CHF {achievement.reward}')
-            input()
-    else:
-        input('Du häsch no kei Achievements verdient, du Noob. ')
+def show_player_achievements(which_ones):
+    if which_ones == 'old':
+        if player_achievements:
+            for achievement in player_achievements:
+                if achievement.status == 'old':
+                    print()
+                    print(f'-- {achievement.name} -- ')
+                    print(f'{achievement.description}')
+                    print(f'Verdient: {achievement.time_earned_formatted}')
+                    print(f'CHF {achievement.reward}')
+                    input()
+        else:
+            input('Du häsch no kei Achievements verdient, du Noob. ')
 
+    elif which_ones == 'new':
+        for achievement in player_achievements:
+            if achievement.status == 'new':
+                print('---------------------')
+                print('  Neus Achievement! ')
+                print(achievement)
+                print('---------------------')
+
+        for achievement in player_achievements:
+            if achievement.status == 'new':
+                achievement.status = 'old'
+
+    else:
+        input('invalid argument given when called show_player_achievements(). ')
+    return player_achievements
     main_menu()
 
 
-def add_achievement(achievement):
-    achievement.time_earned = datetime.now()
-    player_achievements.append(achievement)
-    print('---------------------')
-    print('  Neus Achievement! ')
-    print(achievement)
-    print('---------------------')
+def add_achievement(achievement_id):
+    added_achievement = None
+    for achievement in all_achievements:
+        if achievement.id == achievement_id:
+            added_achievement = achievement
+
+    added_achievement.status = 'new'
+    added_achievement.time_earned = datetime.now()
+    player_achievements.append(added_achievement)
 
 
 # -------------------------------------------- achievements ------------------------------------------
@@ -975,6 +1024,8 @@ def main():
 
 
 def main_menu():
+    check_player_data()
+    
     user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
                                      ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements',
                                       'Statistike', 'Cheat Code igeh',
@@ -993,7 +1044,7 @@ def main_menu():
         input()
         main_menu()  # I know, I know
     if user_selection == 'a':
-        show_player_achievements()
+        show_player_achievements('old')
     if user_selection == 'st':
         show_player_statistics()
     if user_selection == 'ch':
@@ -1216,6 +1267,8 @@ def end_program(optional_message):
         input(f'© {current_year} Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
         exit()
 
+
+player_data_financial['purchased_stocks'] = 1
 
 main()
 
