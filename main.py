@@ -163,59 +163,70 @@ class Player:
     skill_lv: int
     xp: int
     balance: float
+    inventory: list
+    stocks: list
+    achievements: list
+    data_game: dict
+    data_items: dict
+    data_financial: dict
+    data_misc: dict
+    data_translations: dict
+
+    def add_item(self, item):
+        if item in all_items:
+            self.inventory.append(item)
+        else:
+            raise Exception(f'Tried adding invalid item {item.name}. ')
 
 
-player = Player(skill_lv=1, xp=90, balance=500.0)
-player_inventory = find_item('id', ['colt_m1911', 'm16a1', 'rpg_7', 'medkit'])
-player_stocks = ['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin']
+player = Player(skill_lv=1, xp=90, balance=500.0,
+                inventory=find_item('id', ['colt_m1911', 'm16a1', 'rpg_7', 'medkit']),
+                stocks=['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin'],
+                achievements=[],
+                data_game={'killed_mothers': 0,
+                           'damage_dealt': 0,
+                           },
+                data_items={'purchased_items_firearm': 0,
+                            'purchased_items_explosive': 0,
+                            'purchased_items_consumable': 0,
+                            'purchased_items_videogame': 0,
+                            'purchased_items_meme': 0
+                            },
+                data_financial={'total_spendings': 0,
+                                'total_earnings': 0,
+                                'purchased_stocks': 0,
+                                'purchased_crypto': 0
+                                },
+                data_misc={'invalid inputs': 0,
+                           'entered cheat codes': 0,
+                           },
+                data_translations={'killed_mothers': 'Killti Müetere',
+                                   'damage_dealt': 'Verursachte Schade',
+
+                                   'purchased_items_firearm': 'Gkaufti Schusswaffe',
+                                   'purchased_items_explosive': 'Gkaufte Sprängstoff',
+                                   'purchased_items_consumable': 'Gkaufti Konsumware',
+                                   'purchased_items_videogame': 'Gkaufti Videospiel Items',
+                                   'purchased_items_meme': 'Gkaufti Meme Items',
+
+                                   'total_spendings': 'Usgabe total',
+                                   'total_earnings': 'Ihname total',
+                                   'purchased_stocks': 'Gkaufti Aktie',
+                                   'purchased_crypto': 'Gkaufts Krypto'
+                                   }
+                )
 
 # --------- player stuff ------
 # --------- player data -------
 
-player_data_game = {'killed_mothers': 0,
-                    'damage_dealt': 0,
-                    }
-
-player_data_items = {'purchased_items_firearm': 0,
-                     'purchased_items_explosive': 0,
-                     'purchased_items_consumable': 0,
-                     'purchased_items_videogame': 0,
-                     'purchased_items_meme': 0
-                     }
-
-player_data_financial = {'total_spendings': 0,
-                         'total_earnings': 0,
-                         'purchased_stocks': 0,
-                         'purchased_crypto': 0
-                         }
-
-player_data_misc = {'invalid inputs': 0,
-                    'entered cheat codes': 0,
-                    }
-
-player_data_translations = {'killed_mothers': 'Killti Müetere',
-                            'damage_dealt': 'Verursachte Schade',
-
-                            'purchased_items_firearm': 'Gkaufti Schusswaffe',
-                            'purchased_items_explosive': 'Gkaufte Sprängstoff',
-                            'purchased_items_consumable': 'Gkaufti Konsumware',
-                            'purchased_items_videogame': 'Gkaufti Videospiel Items',
-                            'purchased_items_meme': 'Gkaufti Meme Items',
-
-                            'total_spendings': 'Usgabe total',
-                            'total_earnings': 'Ihname total',
-                            'purchased_stocks': 'Gkaufti Aktie',
-                            'purchased_crypto': 'Gkaufts Krypto'
-                            }
-
 
 def check_player_data():
     input('check_player_data()')
-    if player_data_game['killed_mothers'] == 1:
+    if player.data_game['killed_mothers'] == 1:
         add_achievement(3)
-    if player_data_financial['purchased_stocks'] == 1:
+    if player.data_financial['purchased_stocks'] == 1:
         add_achievement(5)
-    if player_data_items['purchased_items_meme'] == 1:
+    if player.data_items['purchased_items_meme'] == 1:
         add_achievement(6)
 
     new_achievements_earned = False
@@ -227,7 +238,6 @@ def check_player_data():
         show_player_achievements('new')
 
 
-
 # --------- achievement stuff ---------
 @dataclass
 class Achievement:
@@ -237,7 +247,6 @@ class Achievement:
     reward: float
     status: str
     time_earned: datetime = datetime(1970, 1, 1, 12, 00)
-
 
     def __str__(self):
         return f'-- {self.name} --\n{self.description}\nVerdient: {self.time_earned_formatted}\nCHF {self.reward}'
@@ -428,9 +437,9 @@ def show_player_inventory():
         compactness = input_selection(['a', 'k', 'x'], ['Alli Eigeschafte', 'Kompakt', 'zrugg zum Hauptmenü'],
                                       'Was sött alles ahzeigt werde?')
         if compactness == 'a':
-            show_items(player_inventory, 'show all properties')
+            show_items(player.inventory, 'show all properties')
         if compactness == 'k':
-            show_items(player_inventory, 'show only names')
+            show_items(player.inventory, 'show only names')
     main_menu()
 
 
@@ -533,17 +542,17 @@ def show_player_statistics():
                                      'Welli Statistik wetsch du ahluege?')
     try:
         if user_selection == 'g':
-            for key, value in player_data_game.items():
-                print(f'{player_data_translations[key]}: {value}')
+            for key, value in player.data_game.items():
+                print(f'{player.data_translations[key]}: {value}')
         if user_selection == 'i':
-            for key, value in player_data_items.items():
-                print(f'{player_data_translations[key]}: {value}')
+            for key, value in player.data_items.items():
+                print(f'{player.data_translations[key]}: {value}')
         if user_selection == 'f':
-            for key, value in player_data_financial.items():
-                print(f'{player_data_translations[key]}: {value}')
-            gross_profit = player_data_financial['total_earnings'] - player_data_financial['total_spendings']
+            for key, value in player.data_financial.items():
+                print(f'{player.data_translations[key]}: {value}')
+            gross_profit = player.data_financial['total_earnings'] - player.data_financial['total_spendings']
             try:
-                gross_profti_ratio = gross_profit * 100 / player_data_financial['total_earnings']
+                gross_profti_ratio = gross_profit * 100 / player.data_financial['total_earnings']
             except ZeroDivisionError:
                 gross_profti_ratio = 'N/A'
                 print(f'\nBruttgwünn: CHF {gross_profit}\nBruttogwünnquote: {gross_profti_ratio}')
@@ -579,7 +588,7 @@ def buy_items():
         shop()
 
     if selected_item.price <= player.balance:
-        player_inventory.append(selected_item)
+        player.inventory.append(selected_item)
         input(f'{selected_item.name} isch dim Inventar hinzuegfüegt worde. ')
         transact_money(-selected_item.price)
         input(f'{selected_item.price} Stutz sind dim Konto abzoge worde. ')
@@ -592,9 +601,9 @@ def buy_items():
 def transact_money(amount):
     player.balance += amount
     if amount >= 0:
-        player_data_financial['total_earnings'] += amount
+        player.data_financial['total_earnings'] += amount
     else:
-        player_data_financial['total_spendings'] -= amount  # total amount should be shown positive in statistics
+        player.data_financial['total_spendings'] -= amount  # total amount should be shown positive in statistics
 
 
 # -------------- transaction ------------------
@@ -645,7 +654,7 @@ def buy_stock(stock_list):
                 invest()  # go back to invest terminal
 
     for i in range(stock_quantity):
-        player_stocks.append(selected_stock_key)
+        player.stocks.append(selected_stock_key)
 
     transact_money(-total_stock_price)
 
@@ -653,9 +662,9 @@ def buy_stock(stock_list):
     input(f'Dim Konto sind CHF {total_stock_price} abzoge worde.')
 
     if selected_stock_key in ['Microsoft', 'Tesla', 'Gamestop']:
-        player_data_financial['purchased_stocks'] += stock_quantity
+        player.data_financial['purchased_stocks'] += stock_quantity
     if selected_stock_key in ['Bitcoin', 'Ethereum', 'Dogecoin']:  # permanent temporary solution
-        player_data_financial['purchased_crypto'] += stock_quantity
+        player.data_financial['purchased_crypto'] += stock_quantity
 
     bank()
 
@@ -689,7 +698,7 @@ def sell_stock():
 
     show_player_stocks()
 
-    player_stocks_valued = {player_stock: all_stocks[player_stock] for player_stock in player_stocks}
+    player_stocks_valued = {player_stock: all_stocks[player_stock] for player_stock in player.stocks}
 
     player_stocks_keys = player_stocks_valued.keys()
     player_stocks_values = player_stocks_valued.values()
@@ -709,7 +718,7 @@ def sell_stock():
 
     input(f'{selected_stock} hät en momentane Marktwert vo CHF {selected_stock_value}')
 
-    stock_occurrences = count_stocks(player_stocks)
+    stock_occurrences = count_stocks(player.stocks)
     selected_stock_quantity = stock_occurrences[selected_stock]
 
     while True:
@@ -728,7 +737,7 @@ def sell_stock():
                 sell_stock()  # go back to selling terminal
 
     for i in range(sell_quantity):
-        player_stocks.remove(selected_stock)
+        player.stocks.remove(selected_stock)
 
     transact_money(total_selling_value)
 
@@ -739,7 +748,7 @@ def sell_stock():
 
 
 def show_player_stocks():
-    stock_occurrences = count_stocks(player_stocks)
+    stock_occurrences = count_stocks(player.stocks)
 
     stock_names = stock_occurrences.keys()
     stock_quantities = stock_occurrences.values()
@@ -821,7 +830,7 @@ def heist_preparation(heist_mode):
     if heist_mode == 'a':
         allowed_categories = ['rifle', 'assault rifle']
         for item in all_items:
-            if item in player_inventory and (item.category in allowed_categories
+            if item in player.inventory and (item.category in allowed_categories
                                              or item.top_level_category == 'explosive'):
                 allowed_items.append(item)
 
@@ -833,7 +842,7 @@ def heist_preparation(heist_mode):
         allowed_categories = ['handgun']
 
         for item in all_items:
-            if item in player_inventory and (item.category in allowed_categories):
+            if item in player.inventory and (item.category in allowed_categories):
                 allowed_items.append(item)
 
         print()
@@ -844,7 +853,7 @@ def heist_preparation(heist_mode):
         allowed_categories = ['meme']
 
         for item in all_items:
-            if item in player_inventory and (item.category in allowed_categories):
+            if item in player.inventory and (item.category in allowed_categories):
                 allowed_items.append(item)
 
         if not allowed_items:
@@ -858,7 +867,7 @@ def heist_preparation(heist_mode):
     heist_items = []
     while True:
         selected_item = select_item(allowed_items)
-        player_inventory.remove(selected_item)
+        player.inventory.remove(selected_item)
         allowed_items.remove(selected_item)
         heist_items.append(selected_item)
         continue_item_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Wetsch du witeri Items mitneh? ')
@@ -1025,7 +1034,7 @@ def main():
 
 def main_menu():
     check_player_data()
-    
+
     user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
                                      ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements',
                                       'Statistike', 'Cheat Code igeh',
@@ -1118,7 +1127,7 @@ def game():
 
                 show_dm_properties(dini_mueter, False, used_item=None)
                 print('Was wetsch du uf sie ahwände? ')
-                selected_item = select_item(player_inventory)
+                selected_item = select_item(player.inventory)
                 print(f'Du wändisch {selected_item.name} ah')
 
                 dini_mueter = calculate_dm_prop_infl(dini_mueter, used_item=selected_item)
@@ -1182,7 +1191,7 @@ def enter_cheat_code():
 
     elif user_cheat_code == '3.141592654':
         for i in range(100):
-            player_stocks.append('Tesla')
+            player.stocks.append('Tesla')
         input('Cheat Code aktiviert - Du häsch 100 Tesla Aktie becho. ')
 
     elif user_cheat_code == 'DINIFETTIMUETER':
@@ -1190,12 +1199,12 @@ def enter_cheat_code():
 
     elif user_cheat_code == '420':
         for i in range(1000):
-            player_stocks.append('Weed')
+            player.stocks.append('Weed')
         input('Cheat Code aktiviert - Du häsch 1 Kg Weed becho. ')
 
     elif user_cheat_code == 'TRUPP26':
         item = find_item('id', ['secret_firedragon'])
-        player_inventory.append(item)
+        player.inventory.append(item)
         input('Cheat Code aktiviert - Du häsch de geheimi Fürdrache becho!!!!!!!')
 
     elif user_cheat_code == 'DEFYNNISCHENSPAST':
@@ -1268,7 +1277,7 @@ def end_program(optional_message):
         exit()
 
 
-player_data_financial['purchased_stocks'] = 1
+player.data_financial['purchased_stocks'] = 1
 
 main()
 
