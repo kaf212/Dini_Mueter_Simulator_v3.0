@@ -1,16 +1,17 @@
 # --------------------------------------- global resources -----------------------------------------------
 from random import randint
 from dataclasses import dataclass
-from datetime import datetime
-
-# --------- item stuff ----------------
+from player import Player
 from item import find_item, initialize_items
+# --------- item stuff ----------------
+
+
 all_items = initialize_items()
 
 # --------- item stuff ----------------
 
 # --------- player stuff --------
-from player import Player
+
 
 player = Player(skill_lv=1, xp=90, balance=500.0,
                 inventory=find_item('id', ['colt_m1911', 'm16a1', 'rpg_7', 'medkit']),
@@ -298,7 +299,7 @@ def show_player_achievements(achievement_status):
                 print('  Neus Achievement! ')
                 print(achievement)
                 print('---------------------')
-                input()
+                # input()
 
         for achievement in player.achievements:
             if achievement.status == 'new':

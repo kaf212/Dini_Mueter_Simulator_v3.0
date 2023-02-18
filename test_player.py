@@ -1,8 +1,13 @@
 import pytest
+from datetime import datetime
 
+from _pytest import monkeypatch
+
+from main import check_player_data
 from player import Player
 from item import Item
 from item import initialize_items
+from achievement import Achievement, initialize_achievements, find_achievement
 
 
 @pytest.fixture
@@ -56,6 +61,11 @@ def all_items():
     return initialize_items()
 
 
+@pytest.fixture
+def all_achievements():
+    return initialize_achievements()
+
+
 def test_add_item(player, all_items):
     for item in all_items:
         player.add_item(item)
@@ -70,5 +80,20 @@ def test_add_not_existing_item(player, not_existing_item):
         assert True
     else:
         assert False
+
+
+def test_add_achievement(player, all_achievements):
+    for achievement in all_achievements:
+        player.add_achievement(achievement.id)
+
+    test_passed = True
+    for achievement in player.achievements:
+        if achievement.status != 'new' or achievement.time_earned != datetime.now():
+            raise Exception('Test add achievement failed, status != "new" or time_earned not correct. ')
+
+
+
+
+
 
 
