@@ -145,7 +145,7 @@ def find_item(search_criteria, search_term_list):
             input('invalid search criteria, check find_item() for debugging. ')
 
     found_items_quantity = 0
-    for found_item in found_items:    # TODO: how about use len() here, you dumb fuck?
+    for found_item in found_items:  # TODO: how about use len() here, you dumb fuck?
         found_items_quantity += 1
 
     if found_items_quantity > 1:  # you have no idea how long it took me to come up with this fix
@@ -177,6 +177,21 @@ class Player:
             self.inventory.append(item)
         else:
             raise Exception(f'Tried adding invalid item {item.name}. ')
+
+    def add_achievement(self, achievement_id):
+        player_achievements_ids = []
+        for achievement in self.achievements:
+            player_achievements_ids.append(achievement.id)
+
+        if achievement_id not in player_achievements_ids:
+            added_achievement = None
+            for achievement in all_achievements:
+                if achievement.id == achievement_id:
+                    added_achievement = achievement
+
+            added_achievement.status = 'new'
+            added_achievement.time_earned = datetime.now()
+            self.achievements.append(added_achievement)
 
 
 player = Player(skill_lv=1, xp=90, balance=500.0,
@@ -216,6 +231,7 @@ player = Player(skill_lv=1, xp=90, balance=500.0,
                                    }
                 )
 
+
 # --------- player stuff ------
 # --------- player data -------
 
@@ -223,11 +239,11 @@ player = Player(skill_lv=1, xp=90, balance=500.0,
 def check_player_data():
     # input('check_player_data()')
     if player.data_game['killed_mothers'] == 1:
-        add_achievement(3)
+        player.add_achievement(3)
     if player.data_financial['purchased_stocks'] == 1:
-        add_achievement(5)
+        player.add_achievement(5)
     if player.data_items['purchased_items_meme'] == 1:
-        add_achievement(6)
+        player.add_achievement(6)
 
     new_achievements_earned = False
     for achievement in player.achievements:
@@ -274,6 +290,7 @@ def initialize_achievements():
 
 
 all_achievements = initialize_achievements()
+
 
 def find_achievement(id):
     found_achievement = None
@@ -347,7 +364,7 @@ def show_items(item_list, printed_properties):
     should be printed
     :return: none
     """
-    print('show_items() is being executed')
+    # print('show_items() is being executed')
     if printed_properties == 'show all properties':
         for item in item_list:
             print('--------------------------')
@@ -428,7 +445,7 @@ def select_item(item_list):
 
 
 def show_player_inventory():
-    print('show_player_inventory() is being executed')
+    # print('show_player_inventory() 3 executed')
     compactness = ''
     while compactness != 'x':
         compactness = input_selection(['a', 'k', 'x'], ['Alli Eigeschafte', 'Kompakt', 'zrugg zum Hauptmenü'],
@@ -521,22 +538,6 @@ def show_player_achievements(achievement_status):
     main_menu()
 
 
-def add_achievement(achievement_id):
-    player_achievements_ids = []
-    for achievement in player.achievements:
-        player_achievements_ids.append(achievement.id)
-
-    if achievement_id not in player_achievements_ids:
-        added_achievement = None
-        for achievement in all_achievements:
-            if achievement.id == achievement_id:
-                added_achievement = achievement
-
-        added_achievement.status = 'new'
-        added_achievement.time_earned = datetime.now()
-        player.achievements.append(added_achievement)
-
-
 # -------------------------------------------- achievements ------------------------------------------
 # -------------------------------------------- statistics ------------------------------------------
 def show_player_statistics():
@@ -576,7 +577,7 @@ def show_player_statistics():
 
 
 def buy_items():
-    print('buy_items() is being executed')
+    # print('buy_items() is being executed')
     items_shop = all_items
     selected_item = select_item(items_shop)
     if selected_item.req_skill_lv > player.skill_lv:
@@ -590,7 +591,7 @@ def buy_items():
         shop()
 
     if selected_item.price <= player.balance:
-        player.inventory.append(selected_item)
+        player.add_item(selected_item)
         input(f'{selected_item.name} isch dim Inventar hinzuegfüegt worde. ')
         transact_money(-selected_item.price)
         input(f'{selected_item.price} Stutz sind dim Konto abzoge worde. ')
@@ -925,7 +926,7 @@ def initialize_dm():
     initializes all DM properties to a random value in given intervals
     :return:
     """
-    print('initialize_dm() is being executed')
+    # print('initialize_dm() is being executed')
     dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion = randomize_dm_properties()
     new_dini_mueter = DiniMueter(dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion)
 
@@ -937,7 +938,7 @@ def randomize_dm_properties():
     randomizes DM properties on an given interval
     :return dm properties:
     """
-    print('randomize_dm_properties() is being executed')
+    # print('randomize_dm_properties() is being executed')
     import random
     dm_mass = random.randint(100, 250)
     dm_health = random.randint(40, 100)
@@ -1206,7 +1207,7 @@ def enter_cheat_code():
 
     elif user_cheat_code == 'TRUPP26':
         item = find_item('id', ['secret_firedragon'])
-        player.inventory.append(item)
+        player.add_item(item)
         input('Cheat Code aktiviert - Du häsch de geheimi Fürdrache becho!!!!!!!')
 
     elif user_cheat_code == 'DEFYNNISCHENSPAST':
