@@ -47,42 +47,7 @@ class Player:
             self.achievements.append(added_achievement)
 
 
-# player = Player(skill_lv=1, xp=90, balance=500.0,
-#                 inventory=find_item('id', ['colt_m1911', 'm16a1', 'rpg_7', 'medkit']),
-#                 stocks=['Microsoft', 'Microsoft', 'Tesla', 'Bitcoin'],
-#                 achievements=[],
-#                 data_game={'killed_mothers': 0,
-#                            'damage_dealt': 0,
-#                            },
-#                 data_items={'purchased_items_firearm': 0,
-#                             'purchased_items_explosive': 0,
-#                             'purchased_items_consumable': 0,
-#                             'purchased_items_videogame': 0,
-#                             'purchased_items_meme': 0
-#                             },
-#                 data_financial={'total_spendings': 0,
-#                                 'total_earnings': 0,
-#                                 'purchased_stocks': 0,
-#                                 'purchased_crypto': 0
-#                                 },
-#                 data_misc={'invalid inputs': 0,
-#                            'entered cheat codes': 0,
-#                            },
-#                 data_translations={'killed_mothers': 'Killti Müetere',
-#                                    'damage_dealt': 'Verursachte Schade',
 #
-#                                    'purchased_items_firearm': 'Gkaufti Schusswaffe',
-#                                    'purchased_items_explosive': 'Gkaufte Sprängstoff',
-#                                    'purchased_items_consumable': 'Gkaufti Konsumware',
-#                                    'purchased_items_videogame': 'Gkaufti Videospiel Items',
-#                                    'purchased_items_meme': 'Gkaufti Meme Items',
-#
-#                                    'total_spendings': 'Usgabe total',
-#                                    'total_earnings': 'Ihname total',
-#                                    'purchased_stocks': 'Gkaufti Aktie',
-#                                    'purchased_crypto': 'Gkaufts Krypto'
-#                                    }
-#                 )
 
 
 # --------- player stuff ------
