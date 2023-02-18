@@ -145,7 +145,7 @@ def find_item(search_criteria, search_term_list):
             input('invalid search criteria, check find_item() for debugging. ')
 
     found_items_quantity = 0
-    for found_item in found_items:
+    for found_item in found_items:    # TODO: how about use len() here, you dumb fuck?
         found_items_quantity += 1
 
     if found_items_quantity > 1:  # you have no idea how long it took me to come up with this fix
@@ -221,7 +221,7 @@ player = Player(skill_lv=1, xp=90, balance=500.0,
 
 
 def check_player_data():
-    input('check_player_data()')
+    # input('check_player_data()')
     if player.data_game['killed_mothers'] == 1:
         add_achievement(3)
     if player.data_financial['purchased_stocks'] == 1:
@@ -230,7 +230,7 @@ def check_player_data():
         add_achievement(6)
 
     new_achievements_earned = False
-    for achievement in player_achievements:
+    for achievement in player.achievements:
         if achievement.status == 'new':
             new_achievements_earned = True
 
@@ -274,9 +274,6 @@ def initialize_achievements():
 
 
 all_achievements = initialize_achievements()
-
-player_achievements = []
-
 
 def find_achievement(id):
     found_achievement = None
@@ -492,10 +489,10 @@ def print_skill_lv_bar():
 
 # -------------------------------------------- player ------------------------------------------
 # -------------------------------------------- achievements ------------------------------------------
-def show_player_achievements(which_ones):
-    if which_ones == 'old':
-        if player_achievements:
-            for achievement in player_achievements:
+def show_player_achievements(achievement_status):
+    if achievement_status == 'old':
+        if player.achievements:
+            for achievement in player.achievements:
                 if achievement.status == 'old':
                     print()
                     print(f'-- {achievement.name} -- ')
@@ -506,33 +503,38 @@ def show_player_achievements(which_ones):
         else:
             input('Du häsch no kei Achievements verdient, du Noob. ')
 
-    elif which_ones == 'new':
-        for achievement in player_achievements:
+    elif achievement_status == 'new':
+        for achievement in player.achievements:
             if achievement.status == 'new':
                 print('---------------------')
                 print('  Neus Achievement! ')
                 print(achievement)
                 print('---------------------')
+                input()
 
-        for achievement in player_achievements:
+        for achievement in player.achievements:
             if achievement.status == 'new':
                 achievement.status = 'old'
 
     else:
         input('invalid argument given when called show_player_achievements(). ')
-    return player_achievements
     main_menu()
 
 
 def add_achievement(achievement_id):
-    added_achievement = None
-    for achievement in all_achievements:
-        if achievement.id == achievement_id:
-            added_achievement = achievement
+    player_achievements_ids = []
+    for achievement in player.achievements:
+        player_achievements_ids.append(achievement.id)
 
-    added_achievement.status = 'new'
-    added_achievement.time_earned = datetime.now()
-    player_achievements.append(added_achievement)
+    if achievement_id not in player_achievements_ids:
+        added_achievement = None
+        for achievement in all_achievements:
+            if achievement.id == achievement_id:
+                added_achievement = achievement
+
+        added_achievement.status = 'new'
+        added_achievement.time_earned = datetime.now()
+        player.achievements.append(added_achievement)
 
 
 # -------------------------------------------- achievements ------------------------------------------
@@ -1276,8 +1278,6 @@ def end_program(optional_message):
         input(f'© {current_year} Atzgerware Ltd. - Alli Rächt vorbehalte (mis Programm) ')
         exit()
 
-
-player.data_financial['purchased_stocks'] = 1
 
 main()
 
