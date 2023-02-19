@@ -692,88 +692,82 @@ class DiniMueter:
                 f'\nHässigkeit: {self.anger} \nLangwiili: {self.boredom}'
                 f'\nVerwirrtheit: {self.confusion}')
 
+    def randomize_properties(self):
+        """
+        randomizes DM properties on an given interval
+        :return dm properties:
+        """
+        import random
+        self.mass = random.randint(100, 250)
+        self.health = random.randint(40, 100)
+        self.mood = random.randint(40, 100)
+        self.anger = random.randint(1, 50)
+        self.boredom = random.randint(1, 50)
+        self.confusion = random.randint(1, 20)
+
+        return self.mass, self.health, self.mood, self.anger, self.boredom, self.confusion
+
+    def calculate_prop_infl(self, used_item):
+        self.mass += used_item.infl_mass
+        self.health += used_item.infl_health
+        self.mood += used_item.infl_mood
+        self.anger += used_item.infl_anger
+        self.boredom += used_item.infl_boredom
+        self.confusion += used_item.infl_confusion
+
+        dini_mueter = DiniMueter(self.mass, self.health, self.mood, self.anger,
+                                 self.boredom, self.confusion)
+
+        return dini_mueter
+
+    def show_properties(self, show_influence, used_item):
+        print()
+        if show_influence and used_item is not None:
+            if used_item.infl_mass >= 0:
+                print(f'Masse: {self.mass} Kg  (+ {used_item.infl_mass})')
+            else:
+                print(f'Masse: {self.mass} Kg  ({used_item.infl_mass})')
+            if used_item.infl_health >= 0:
+                print(f'Gsundheit: {self.health} HP  (+ {used_item.infl_health})')
+            else:
+                print(f'Gsundheit: {self.health} HP  ({used_item.infl_health})')
+            if used_item.infl_mood >= 0:
+                print(f'Stimmig: {self.mood} MP  (+ {used_item.infl_mood})')
+            else:
+                print(f'Stimmig: {self.mood} MP  ({used_item.infl_mood})')
+            if used_item.infl_anger >= 0:
+                print(f'Hässigkeit: {self.anger} AP  (+ {used_item.infl_anger})')
+            else:
+                print(f'Hässigkeit: {self.anger} AP  ({used_item.infl_anger})')
+            if used_item.infl_boredom >= 0:
+                print(f'Langwili: {self.boredom} BP  (+ {used_item.infl_boredom})')
+            else:
+                print(f'Langwili: {self.boredom} BP  ({used_item.infl_boredom})')
+            if used_item.infl_confusion >= 0:
+                print(f'Verwirrtheit: {self.confusion} CP  (+ {used_item.infl_confusion})')
+            else:
+                print(f'Verwirrtheit: {self.confusion} CP  ({used_item.infl_confusion})')
+            input()
+        elif not show_influence or used_item is None:
+            print(f'Masse: {self.mass} Kg')
+            print(f'Gsundheit: {self.health} HP')
+            print(f'Stimmig: {self.mood} MP')
+            print(f'Hässigkeit: {self.anger} AP')
+            print(f'Langwili: {self.boredom} BP')
+            print(f'Verwirrtheit: {self.confusion} CP')
+            input()
+        else:
+            input('ERROR in show_dm_properties()')
+
 
 def initialize_dm():
     """
     initializes all DM properties to a random value in given intervals
     :return:
     """
-    # print('initialize_dm() is being executed')
-    dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion = randomize_dm_properties()
-    new_dini_mueter = DiniMueter(dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion)
-
+    new_dini_mueter = DiniMueter(0, 0, 0, 0, 0, 0)
+    new_dini_mueter.randomize_properties()
     return new_dini_mueter
-
-
-def randomize_dm_properties():
-    """
-    randomizes DM properties on an given interval
-    :return dm properties:
-    """
-    # print('randomize_dm_properties() is being executed')
-    import random
-    dm_mass = random.randint(100, 250)
-    dm_health = random.randint(40, 100)
-    dm_mood = random.randint(40, 100)
-    dm_anger = random.randint(1, 50)
-    dm_boredom = random.randint(1, 50)
-    dm_confusion = random.randint(1, 20)
-
-    return dm_mass, dm_health, dm_mood, dm_anger, dm_boredom, dm_confusion
-
-
-def show_dm_properties(dini_mueter, show_influence, used_item):
-    print()
-    if show_influence and used_item is not None:
-        if used_item.infl_mass >= 0:
-            print(f'Masse: {dini_mueter.mass} Kg  (+ {used_item.infl_mass})')
-        else:
-            print(f'Masse: {dini_mueter.mass} Kg  ({used_item.infl_mass})')
-        if used_item.infl_health >= 0:
-            print(f'Gsundheit: {dini_mueter.health} HP  (+ {used_item.infl_health})')
-        else:
-            print(f'Gsundheit: {dini_mueter.health} HP  ({used_item.infl_health})')
-        if used_item.infl_mood >= 0:
-            print(f'Stimmig: {dini_mueter.mood} MP  (+ {used_item.infl_mood})')
-        else:
-            print(f'Stimmig: {dini_mueter.mood} MP  ({used_item.infl_mood})')
-        if used_item.infl_anger >= 0:
-            print(f'Hässigkeit: {dini_mueter.anger} AP  (+ {used_item.infl_anger})')
-        else:
-            print(f'Hässigkeit: {dini_mueter.anger} AP  ({used_item.infl_anger})')
-        if used_item.infl_boredom >= 0:
-            print(f'Langwili: {dini_mueter.boredom} BP  (+ {used_item.infl_boredom})')
-        else:
-            print(f'Langwili: {dini_mueter.boredom} BP  ({used_item.infl_boredom})')
-        if used_item.infl_confusion >= 0:
-            print(f'Verwirrtheit: {dini_mueter.confusion} CP  (+ {used_item.infl_confusion})')
-        else:
-            print(f'Verwirrtheit: {dini_mueter.confusion} CP  ({used_item.infl_confusion})')
-        input()
-    elif not show_influence or used_item is None:
-        print(f'Masse: {dini_mueter.mass} Kg')
-        print(f'Gsundheit: {dini_mueter.health} HP')
-        print(f'Stimmig: {dini_mueter.mood} MP')
-        print(f'Hässigkeit: {dini_mueter.anger} AP')
-        print(f'Langwili: {dini_mueter.boredom} BP')
-        print(f'Verwirrtheit: {dini_mueter.confusion} CP')
-        input()
-    else:
-        input('ERROR in show_dm_properties()')
-
-
-def calculate_dm_prop_infl(dini_mueter, used_item):
-    dini_mueter.mass += used_item.infl_mass
-    dini_mueter.health += used_item.infl_health
-    dini_mueter.mood += used_item.infl_mood
-    dini_mueter.anger += used_item.infl_anger
-    dini_mueter.boredom += used_item.infl_boredom
-    dini_mueter.confusion += used_item.infl_confusion
-
-    dini_mueter = DiniMueter(dini_mueter.mass, dini_mueter.health, dini_mueter.mood, dini_mueter.anger,
-                             dini_mueter.boredom, dini_mueter.confusion)
-
-    return dini_mueter
 
 
 def handle_critical_dm_property(death_messages, player_xp_change):
@@ -900,12 +894,12 @@ def game():
             while continue_playing == 'y':
                 print('Dinere Mueter gahts hütt so: ')
 
-                show_dm_properties(dini_mueter, False, used_item=None)
+                dini_mueter.show_properties(False, used_item=None)
                 print('Was wetsch du uf sie ahwände? ')
                 selected_item = select_item(player.inventory)
                 print(f'Du wändisch {selected_item.name} ah')
 
-                dini_mueter = calculate_dm_prop_infl(dini_mueter, used_item=selected_item)
+                dini_mueter.calculate_prop_infl(used_item=selected_item)
 
                 if dini_mueter.health <= 0:
                     death_messages = ['Dini Mueter isch gstorbe', 'Dini mueter hät is Gras bisse',
@@ -940,7 +934,7 @@ def game():
                     input('Dini Mueter isch hert verwirrt. ')
 
                 input('Enter drucke zum Status überprüefe')
-                show_dm_properties(dini_mueter, True, used_item=selected_item)
+                dini_mueter.show_properties(True, used_item=selected_item)
 
                 continue_playing = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Wetsch wiitermache? ')
                 if continue_playing == 'y':
