@@ -674,6 +674,89 @@ def heist_preparation(heist_mode):
 
 
 # --------------------------------------------- bank ---------------------------------------------
+# --------------------------------------------- casino ---------------------------------------------
+def roulette():
+    user_selection = None
+    user_nr = None
+    user_odd_or_even = None
+    user_colour = None
+    while user_selection != 'x':
+        user_selection = input_selection(['f', 'g', 'z', 's', 'x'], ['Farb', 'Grad/Ungrad', 'Zahl', 'Spile', 'Roulette verlah'], 'Uf was wetsch du setze? ')
+        if user_selection == 'f':
+            user_colour = input_selection(['r', 'f'], ['Rot', 'Schwarz'], 'Uf welli Zahl wetsch du setze? ')
+        if user_selection == 'g':
+            user_odd_or_even = input_selection(['g', 'u'], ['Grad', 'Ungrad'], 'Grad oder ungrad? ')
+        if user_selection == 'z':
+            nr_invalid = True
+            while nr_invalid:
+                user_nr = input_int('Uf welli Zahl wetsch du setze? ')
+                if 0 < user_nr < 36:
+                    print('Die Zahl isch ungütig, du Depp. ')
+                else:
+                    nr_invalid = False
+        if user_selection == 's':
+            break
+        if user_selection == 'x':
+            casino()
+
+    user_bet = None
+    bet_invalid = True
+    while bet_invalid:
+        user_bet = input_int('Wievill wetsch du setze? ')
+        if user_bet < 0 or user_bet > player.balance:
+            print('Das isch en ungültige Betrag. ')
+        else:
+            bet_invalid = False
+
+    number = randint(0, 36)
+
+    number_odd_even = None
+    if number != 0:
+        if number % 2 == 0:
+            number_odd_even = 'g'
+        else:
+            number_odd_even = 'u'
+
+    colour = None
+    if number == 0:
+        colour = 'g'
+    elif 1 <= number >= 10 or 19 <= number >= 28:
+        if number % 2 == 0:
+            colour = 'b'
+        else:
+            colour = 'r'
+    elif 11 <= number >= 18 or 26 <= number >= 36:
+        if number % 2 == 0:
+            colour = 'r'
+        else:
+            colour = 'b'
+
+    if colour == 'r':
+        print(f"D'Dahl {number} (ROT) isch zoge worde. ")
+    elif colour == 'b':
+        print(f"D'Dahl {number} (SCHWARZ) isch zoge worde. ")
+    else:
+        print(f"D'Dahl {number} (GRÜEN) isch zoge worde. ")
+
+    win = None
+    if user_nr == number:
+        win = user_bet * 36
+    if user_colour == colour:
+        win = user_bet * 2
+    if user_odd_or_even == number_odd_even:
+        win = user_bet * 2
+
+    transact_money(-user_bet)
+
+    if win:
+        transact_money(user_bet * 36)
+        input(f'Du häsch CHF {win} gwunne! ')
+    roulette()
+
+
+# --------------------------------------------- casino ---------------------------------------------
+
+
 
 # --------------------------------------------- game -------------------------------------------
 
@@ -804,8 +887,8 @@ def main():
 def main_menu():
     check_player_data()
 
-    user_selection = input_selection(['g', 's', 'b', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Inventar', 'Level ahzeige', 'Achievements',
+    user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
+                                     ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige', 'Achievements',
                                       'Statistike', 'Cheat Code igeh',
                                       'Credits', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
@@ -814,6 +897,8 @@ def main_menu():
         shop()
     if user_selection == 'b':
         bank()
+    if user_selection == 'c':
+        casino()
     if user_selection == 'i':
         show_player_inventory()
     if user_selection == 'l':
@@ -879,6 +964,17 @@ def shop():
             if compactness == 'k':
                 show_items(items_shop, 'show only names and price')
 
+        if user_selection == 'x':
+            main_menu()
+
+
+def casino():
+    user_selection = None
+    while user_selection != 'x':
+        user_selection = input_selection(['r', 'x'], ['Roulette', 'Casino verlah'],
+                                         '\nWillkomme im Casino, was wetsch du mache?')
+        if user_selection == 'r':
+            roulette()
         if user_selection == 'x':
             main_menu()
 
