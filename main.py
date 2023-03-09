@@ -155,13 +155,16 @@ def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now(
     with open(save_file_path, 'w') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames=attributes)
         csv_writer.writeheader()
-        if old_values:
-            for line in old_values:
-                csv_writer.writerow(line)
 
         csv_writer.writerow({'key': 'skill_lv', 'value': player.skill_lv})
-        csv_writer.writerow(({'key': 'xp', 'value': player.xp}))
-        csv_writer.writerow(({'key': 'balance', 'value': player.balance}))
+        csv_writer.writerow({'key': 'xp', 'value': player.xp})
+        csv_writer.writerow({'key': 'balance', 'value': player.balance})
+        for item in player.inventory:
+            csv_writer.writerow({'key': 'item', 'value': item.id})
+        for stock in player.stocks:
+            csv_writer.writerow({'key': 'stock', 'value': stock})
+        for achievement in player.achievements:
+            csv_writer.writerow({'key': 'achievement', 'value': achievement.id})
 
 
 initialize_save_dir()
