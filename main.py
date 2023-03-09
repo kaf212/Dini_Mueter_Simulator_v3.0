@@ -1,8 +1,11 @@
 # --------------------------------------- global resources -----------------------------------------------
+from datetime import datetime
+import os
 from random import randint
 from dataclasses import dataclass
 from player import Player
 from item import find_item, initialize_items
+import csv
 # --------- item stuff ----------------
 
 
@@ -126,6 +129,46 @@ def input_float(prompt):
 
 
 # ----------------------------------------------- input ------------------------------------------------
+# ----------------------------------------------- saves ------------------------------------------------
+
+def initialize_save_dir():
+    if not os.path.exists('saves'):
+        os.mkdir('saves')
+
+
+def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now().year}'):
+    save_file_path = f'saves/{name}.csv'
+    attributes = ['key', 'value']
+
+    old_values = []
+    if os.path.exists(save_file_path):
+        with open(save_file_path, 'r') as csv_file:
+            dict_reader = csv.DictReader(csv_file, fieldnames=attributes)
+            next(csv_file)
+            for line in dict_reader:
+                old_values.append(line)
+    else:
+        with open(save_file_path, 'w') as csv_file:
+            csv_writer = csv.DictWriter(csv_file, fieldnames=attributes)
+            csv_writer.writeheader()
+
+    with open(save_file_path, 'w') as csv_file:
+        csv_writer = csv.DictWriter(csv_file, fieldnames=attributes)
+        csv_writer.writeheader()
+        if old_values:
+            for line in old_values:
+                csv_writer.writerow(line)
+
+        csv_writer.writerow({'key': 'skill_lv', 'value': player.skill_lv})
+        csv_writer.writerow(({'key': 'xp', 'value': player.xp}))
+        csv_writer.writerow(({'key': 'balance', 'value': player.balance}))
+
+
+initialize_save_dir()
+
+# ----------------------------------------------- saves ------------------------------------------------
+
+
 # --------------------------------------------- items ------------------------------------------
 
 def show_items(item_list, printed_properties):
@@ -887,10 +930,10 @@ def main():
 def main_menu():
     check_player_data()
 
-    user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'x'],
+    user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp','x'],
                                      ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige', 'Achievements',
                                       'Statistike', 'Cheat Code igeh',
-                                      'Credits', 'Beände'], '\nWas wetsch du mache?  ')
+                                      'Credits', 'Speichere', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
     if user_selection == 's':
@@ -914,6 +957,8 @@ def main_menu():
         enter_cheat_code()
     if user_selection == 'c':
         play_credits()
+    if user_selection == 'sp':
+        save_game()
     if user_selection == 'x':
         user_cofirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
         if user_cofirmation == 'y':
