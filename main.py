@@ -169,12 +169,12 @@ def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now(
 
 
 def validate_save_filename(filename: str) -> bool:
-    if os.path.exists(f'saves/{filename}.csv'):
-        print('Das file gits scho. ')
-        return False
+    # if os.path.exists(f'saves/{filename}.csv'):
+    #     print('Das file gits scho. ')
+    #     return False
     if filename == '':
         print('Das isch kein gültige Dateiname. ')
-        return False
+       #  return False
     invalid_chars = [' ', '.', '/', '%', '|', ',', "'", '"']
     for char in invalid_chars:
         if char in filename:
@@ -1026,7 +1026,16 @@ def main_menu():
         play_credits()
     if user_selection == 'sp':
         filename = enter_filename()
-        save_game(filename)
+        if os.path.exists(f'saves/{filename}.csv'):
+            user_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Die Datei gits scho, wetsch si überschribe? ')
+            if user_selection == 'y':
+                os.remove(f'saves{filename}.csv')
+                save_game(filename)
+            else:
+                main_menu()
+        else:
+            save_game(filename)
+
     if user_selection == 'ld':
         filename = input('Name igeh > ')
         load_save_file(filename)
