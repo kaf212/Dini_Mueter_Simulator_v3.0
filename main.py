@@ -167,6 +167,32 @@ def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now(
             csv_writer.writerow({'key': 'achievement', 'value': achievement.id})
 
 
+def validate_save_filename(filename: str) -> bool:
+    if os.path.exists(f'saves/{filename}.csv'):
+        print('Das file gits scho. ')
+        return False
+    if filename == '':
+        print('Das isch kein gültige Dateiname. ')
+        return False
+    invalid_chars = [' ', '.', '/', '%', '|', ',', "'", '"']
+    for char in invalid_chars:
+        if char in filename:
+            print(f'De name döf nöd "{char}" enthalte. ')
+            return False
+    return True
+
+
+def enter_filename() -> str:
+    filename_invalid = True
+    filename = None
+    while filename_invalid:
+        filename = input('Gib en Dateiname ih > ')
+        if validate_save_filename(filename):
+            filename_invalid = False
+
+    return filename
+
+
 initialize_save_dir()
 
 # ----------------------------------------------- saves ------------------------------------------------
@@ -961,7 +987,8 @@ def main_menu():
     if user_selection == 'c':
         play_credits()
     if user_selection == 'sp':
-        save_game()
+        filename = enter_filename()
+        save_game(filename)
     if user_selection == 'x':
         user_cofirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
         if user_cofirmation == 'y':
