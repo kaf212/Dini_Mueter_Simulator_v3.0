@@ -142,17 +142,17 @@ def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now(
 
     old_values = []
     if os.path.exists(save_file_path):
-        with open(save_file_path, 'r') as csv_file:
+        with open(save_file_path, 'r', encoding='utf-8') as csv_file:
             dict_reader = csv.DictReader(csv_file, fieldnames=attributes)
             next(csv_file)
             for line in dict_reader:
                 old_values.append(line)
     else:
-        with open(save_file_path, 'w') as csv_file:
+        with open(save_file_path, 'w', encoding='utf-8') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=attributes)
             csv_writer.writeheader()
 
-    with open(save_file_path, 'w') as csv_file:
+    with open(save_file_path, 'w', encoding='utf-8') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames=attributes)
         csv_writer.writeheader()
 
@@ -165,6 +165,7 @@ def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now(
             csv_writer.writerow({'key': 'stock', 'value': stock})
         for achievement in player.achievements:
             csv_writer.writerow({'key': 'achievement', 'value': achievement.id})
+    main_menu()
 
 
 def validate_save_filename(filename: str) -> bool:
@@ -191,6 +192,28 @@ def enter_filename() -> str:
             filename_invalid = False
 
     return filename
+
+
+def load_save_file(filename):
+    with open(f'saves/{filename}.csv', 'r', encoding='utf-8') as csv_file:
+        next(csv_file)
+        attributes = ['key', 'value']
+        csv_reader = csv.DictReader(csv_file, fieldnames=attributes)
+        for line in csv_reader:
+            key = line['key']
+            value = line['value']
+            if key == 'skill_lv':
+                player.skill_lv = int(value)
+            if key == 'xp':
+                player.xp = int(value)
+            if key == 'balance':
+                player.balance = float(value)
+            if key == 'item':
+                if not check_item_occurrence(value, 'player_inventory'):
+                    player.add_item(find_item('id', [value]))
+            if key == 'stock':
+                player.stocks.append(value)
+    main_menu()
 
 
 initialize_save_dir()
@@ -282,6 +305,21 @@ def select_item(item_list):
             break
 
     return selected_item
+
+
+def check_item_occurrence(target_id, scope):
+    if scope not in ['all_items', 'player_inventory']:
+        raise ValueError(f'Invalid scope "{scope}" given. ')
+    if scope == 'all_items':
+        for item in all_items:
+            if item.id == target_id:
+                return True
+    elif scope == 'player_inventory':
+        for item in player.inventory:
+            if item.id == target_id:
+                return True
+    return False
+
 
 
 # --------------------------------------------- items ------------------------------------------
@@ -959,10 +997,10 @@ def main():
 def main_menu():
     check_player_data()
 
-    user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp','x'],
+    user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp', 'ld', 'x'],
                                      ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige', 'Achievements',
                                       'Statistike', 'Cheat Code igeh',
-                                      'Credits', 'Speichere', 'Beände'], '\nWas wetsch du mache?  ')
+                                      'Credits', 'Spielstand Speichere', 'Spielstand Lade', 'Beände'], '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
     if user_selection == 's':
@@ -989,6 +1027,9 @@ def main_menu():
     if user_selection == 'sp':
         filename = enter_filename()
         save_game(filename)
+    if user_selection == 'ld':
+        filename = input('Name igeh > ')
+        load_save_file(filename)
     if user_selection == 'x':
         user_cofirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
         if user_cofirmation == 'y':
