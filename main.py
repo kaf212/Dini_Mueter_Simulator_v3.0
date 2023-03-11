@@ -4,7 +4,7 @@ import os
 from random import randint
 from dataclasses import dataclass
 
-from colours import print_success, print_warning
+from colours import *
 from player import Player
 from item import find_item, initialize_items
 import csv
@@ -326,6 +326,7 @@ def select_item(item_list):
         except IndexError:
             print('Die Kategorie existiert nöd, du Dubbel. ')
         else:
+            os.system('cls')
             break
 
     categories = []
@@ -344,6 +345,7 @@ def select_item(item_list):
         except IndexError:
             print('Die Kategorie existiert nöd du schlaue. ')
         else:
+            os.system('cls')
             break
 
     items_of_chosen_category = []
@@ -362,6 +364,7 @@ def select_item(item_list):
         except IndexError:
             print('Das Item existiert nöd du schlaue. ')
         else:
+            os.system('cls')
             break
 
     return selected_item
@@ -977,29 +980,41 @@ class DiniMueter:
         print()
         if show_influence and used_item is not None:
             if used_item.infl_mass >= 0:
-                print(f'Masse: {self.mass} Kg  (+ {used_item.infl_mass})')
+                print(f'Masse: {self.mass} Kg   ', end='')
+                print_green(f'(+ {used_item.infl_mass})')
             else:
-                print(f'Masse: {self.mass} Kg  ({used_item.infl_mass})')
+                print(f'Masse: {self.mass} Kg  ', end='')
+                print_red(f'({used_item.infl_mass})')
             if used_item.infl_health >= 0:
-                print(f'Gsundheit: {self.health} HP  (+ {used_item.infl_health})')
+                print(f'Gsundheit: {self.health} HP  ', end='')
+                print_green(f'(+ {used_item.infl_health})')
             else:
-                print(f'Gsundheit: {self.health} HP  ({used_item.infl_health})')
+                print(f'Gsundheit: {self.health} HP  ', end='')
+                print_red(f'({used_item.infl_health})')
             if used_item.infl_mood >= 0:
-                print(f'Stimmig: {self.mood} MP  (+ {used_item.infl_mood})')
+                print(f'Stimmig: {self.mood} MP  ', end='')
+                print_green(f'(+ {used_item.infl_mood})')
             else:
-                print(f'Stimmig: {self.mood} MP  ({used_item.infl_mood})')
+                print(f'Stimmig: {self.mood} MP  ', end='')
+                print_red(f'({used_item.infl_mood})')
             if used_item.infl_anger >= 0:
-                print(f'Hässigkeit: {self.anger} AP  (+ {used_item.infl_anger})')
+                print(f'Hässigkeit: {self.anger} AP  ', end='')
+                print_green(f'(+ {used_item.infl_anger})')
             else:
-                print(f'Hässigkeit: {self.anger} AP  ({used_item.infl_anger})')
+                print(f'Hässigkeit: {self.anger} AP  ', end='')
+                print_green(f'({used_item.infl_anger})')
             if used_item.infl_boredom >= 0:
-                print(f'Langwili: {self.boredom} BP  (+ {used_item.infl_boredom})')
+                print(f'Langwili: {self.boredom} BP  ', end='')
+                print_red(f'(+ {used_item.infl_boredom})')
             else:
-                print(f'Langwili: {self.boredom} BP  ({used_item.infl_boredom})')
+                print(f'Langwili: {self.boredom} BP  ', end='')
+                print_red(f'({used_item.infl_boredom})')
             if used_item.infl_confusion >= 0:
-                print(f'Verwirrtheit: {self.confusion} CP  (+ {used_item.infl_confusion})')
+                print(f'Verwirrtheit: {self.confusion} CP  ', end='')
+                print_green(f'(+ {used_item.infl_confusion})')
             else:
-                print(f'Verwirrtheit: {self.confusion} CP  ({used_item.infl_confusion})')
+                print(f'Verwirrtheit: {self.confusion} CP  ', end='')
+                print_red(f'({used_item.infl_confusion})')
             input()
         elif not show_influence or used_item is None:
             print(f'Masse: {self.mass} Kg')
@@ -1162,6 +1177,7 @@ def game():
     while user_selection != 'x':
         user_selection = input_selection(['t', 'x'], ['test', 'exit'], 'willkomme i de testumgäbig vom GAME')
         if user_selection == 't':
+            os.system('cls')
             continue_playing = 'y'
             dini_mueter = initialize_dm()
 
@@ -1212,7 +1228,7 @@ def game():
 
                 continue_playing = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Wetsch wiitermache? ')
                 if continue_playing == 'y':
-                    pass
+                    os.system('cls')
                 if continue_playing == 'x':
                     main_menu()
 
