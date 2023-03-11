@@ -3,6 +3,8 @@ from datetime import datetime
 import os
 from random import randint
 from dataclasses import dataclass
+
+from colours import print_success, print_warning
 from player import Player
 from item import find_item, initialize_items
 import csv
@@ -166,7 +168,6 @@ def save_game(name=f'{datetime.now().day}-{datetime.now().month}-{datetime.now()
             csv_writer.writerow({'key': 'stock', 'value': stock})
         for achievement in player.achievements:
             csv_writer.writerow({'key': 'achievement', 'value': achievement.id})
-    main_menu()
 
 
 def validate_save_filename(filename: str) -> bool:
@@ -214,16 +215,20 @@ def load_save_file(filename):
                     player.add_item(find_item('id', [value]))
             if key == 'stock':
                 player.stocks.append(value)
+    print_success(f'De Spielstand "{filename}" isch erfolgrich glade worde. ')
+    input()
     main_menu()
 
 
 def save_game_ui():
     user_selection = input_selection(['e', 'n'], ['Exisierende Spielstand', 'Neui Datei'],
-                                     'Wo wetsch du dis SPiel speichere? ')
+                                     'Wo wetsch du dis Spiel speichere? ')
     if user_selection == 'e':
         selected_file = select_save_file()
         selected_file = remove_filetype(selected_file)
         save_game(selected_file)
+        print_success(f'De Spielstand "{selected_file}" isch erfolrich gspeichered worde. ')
+        input()
     else:
         filename = enter_filename()
         if os.path.exists(f'saves/{filename}.csv'):
@@ -231,10 +236,15 @@ def save_game_ui():
             if user_selection == 'y':
                 os.remove(f'saves{filename}.csv')
                 save_game(filename)
+                print_success(f'De Spielstand "{filename}" isch erfolrich gspeichered worde. ')
+                input()
             else:
                 main_menu()
         else:
             save_game(filename)
+            print_success(f'De Spielstand "{filename}" isch erfolrich gspeichered worde. ')
+            input()
+    main_menu()
 
 
 def list_save_files() -> list:
@@ -1078,14 +1088,13 @@ def main_menu():
         play_credits()
     if user_selection == 'sp':
         save_game_ui()
-
     if user_selection == 'ld':
         filename = select_save_file()
         filename = remove_filetype(filename)
         load_save_file(filename)
     if user_selection == 'x':
-        user_cofirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
-        if user_cofirmation == 'y':
+        user_confirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
+        if user_confirmation == 'y':
             end_program(optional_message=None)
         else:
             main_menu()  # ja, ja ich weiss gopfedammi
