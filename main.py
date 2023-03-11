@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from player import Player
 from item import find_item, initialize_items
 import csv
+
 # --------- item stuff ----------------
 
 
@@ -136,7 +137,7 @@ def initialize_save_dir():
         os.mkdir('saves')
 
 
-def save_game(name =f'{datetime.now().day}-{datetime.now().month}-{datetime.now().year}'):
+def save_game(name=f'{datetime.now().day}-{datetime.now().month}-{datetime.now().year}'):
     save_file_path = f'saves/{name}.csv'
     attributes = ['key', 'value']
 
@@ -174,7 +175,7 @@ def validate_save_filename(filename: str) -> bool:
     #     return False
     if filename == '':
         print('Das isch kein gültige Dateiname. ')
-       #  return False
+    #  return False
     invalid_chars = [' ', '.', '/', '%', '|', ',', "'", '"']
     for char in invalid_chars:
         if char in filename:
@@ -216,7 +217,56 @@ def load_save_file(filename):
     main_menu()
 
 
+def save_game_ui():
+    user_selection = input_selection(['e', 'n'], ['Exisierende Spielstand', 'Neui Datei'],
+                                     'Wo wetsch du dis SPiel speichere? ')
+    if user_selection == 'e':
+        selected_file = select_save_file()
+        selected_file = remove_filetype(selected_file)
+        save_game(selected_file)
+    else:
+        filename = enter_filename()
+        if os.path.exists(f'saves/{filename}.csv'):
+            user_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Die Datei gits scho, wetsch si überschribe? ')
+            if user_selection == 'y':
+                os.remove(f'saves{filename}.csv')
+                save_game(filename)
+            else:
+                main_menu()
+        else:
+            save_game(filename)
+
+
+def list_save_files() -> list:
+    for index, file in enumerate(os.listdir('saves')):
+        print(f'{index}\t{file}')
+
+    return os.listdir('saves')
+
+
+def select_save_file() -> str:
+    files = list_save_files()
+    while True:
+        user_index = input_int('I welli Datei wetsch du speichere? ')
+        try:
+            selected_file = files[user_index]
+        except IndexError:
+            print('Das isch e ungültigi Uswahl. ')
+        else:
+            return selected_file
+
+
+def remove_filetype(filename) -> str:
+    str_tuple = filename.partition('.')
+    str_list = list(str_tuple)
+    str_list.pop(-1)
+    str_list.pop(-1)
+    filename = ''.join(str_list)
+    return filename
+
+
 initialize_save_dir()
+
 
 # ----------------------------------------------- saves ------------------------------------------------
 
@@ -319,7 +369,6 @@ def check_item_occurrence(target_id, scope):
             if item.id == target_id:
                 return True
     return False
-
 
 
 # --------------------------------------------- items ------------------------------------------
@@ -791,7 +840,9 @@ def roulette():
     user_odd_or_even = None
     user_colour = None
     while user_selection != 'x':
-        user_selection = input_selection(['f', 'g', 'z', 's', 'x'], ['Farb', 'Grad/Ungrad', 'Zahl', 'Spile', 'Roulette verlah'], 'Uf was wetsch du setze? ')
+        user_selection = input_selection(['f', 'g', 'z', 's', 'x'],
+                                         ['Farb', 'Grad/Ungrad', 'Zahl', 'Spile', 'Roulette verlah'],
+                                         'Uf was wetsch du setze? ')
         if user_selection == 'f':
             user_colour = input_selection(['r', 'f'], ['Rot', 'Schwarz'], 'Uf welli Zahl wetsch du setze? ')
         if user_selection == 'g':
@@ -865,7 +916,6 @@ def roulette():
 
 
 # --------------------------------------------- casino ---------------------------------------------
-
 
 
 # --------------------------------------------- game -------------------------------------------
@@ -998,9 +1048,11 @@ def main_menu():
     check_player_data()
 
     user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp', 'ld', 'x'],
-                                     ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige', 'Achievements',
+                                     ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige',
+                                      'Achievements',
                                       'Statistike', 'Cheat Code igeh',
-                                      'Credits', 'Spielstand Speichere', 'Spielstand Lade', 'Beände'], '\nWas wetsch du mache?  ')
+                                      'Credits', 'Spielstand Speichere', 'Spielstand Lade', 'Beände'],
+                                     '\nWas wetsch du mache?  ')
     if user_selection == 'g':
         game()
     if user_selection == 's':
@@ -1025,19 +1077,11 @@ def main_menu():
     if user_selection == 'c':
         play_credits()
     if user_selection == 'sp':
-        filename = enter_filename()
-        if os.path.exists(f'saves/{filename}.csv'):
-            user_selection = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Die Datei gits scho, wetsch si überschribe? ')
-            if user_selection == 'y':
-                os.remove(f'saves{filename}.csv')
-                save_game(filename)
-            else:
-                main_menu()
-        else:
-            save_game(filename)
+        save_game_ui()
 
     if user_selection == 'ld':
-        filename = input('Name igeh > ')
+        filename = select_save_file()
+        filename = remove_filetype(filename)
         load_save_file(filename)
     if user_selection == 'x':
         user_cofirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
