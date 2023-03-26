@@ -1,5 +1,5 @@
 # --------------------------------------- global resources -----------------------------------------------
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from random import randint
 from dataclasses import dataclass
@@ -25,6 +25,7 @@ player = Player(skill_lv=1, xp=90, balance=500.0,
                 achievements=[],
                 data_game={'killed_mothers': 0,
                            'damage_dealt': 0,
+                           'playtime': timedelta()
                            },
                 data_items={'purchased_items_firearm': 0,
                             'purchased_items_explosive': 0,
@@ -42,6 +43,7 @@ player = Player(skill_lv=1, xp=90, balance=500.0,
                            },
                 data_translations={'killed_mothers': 'Killti Müetere',
                                    'damage_dealt': 'Verursachte Schade',
+                                   'playtime': 'Spilziit',
 
                                    'purchased_items_firearm': 'Gkaufti Schusswaffe',
                                    'purchased_items_explosive': 'Gkaufte Sprängstoff',
@@ -77,6 +79,15 @@ def check_player_data():
 
     if new_achievements_earned:
         show_player_achievements('new')
+
+
+time_start = datetime.now()
+
+
+def count_playtime():
+    playtime = datetime.now() - time_start
+    player.data_game['playtime'] = playtime
+    print(f'Spilziit: {playtime}')
 
 
 # --------- achievement stuff ---------
@@ -1064,6 +1075,7 @@ def handle_critical_dm_property(death_messages, player_xp_change):
 # --------------------------------------------- game -------------------------------------------
 # ------------------------------------ main ----------------------------------------------------
 
+
 def main():
     print('Willkomme zum Dini Mueter Simulator v3.0! (DEV Edition Alpha Phase)')
     main_menu()
@@ -1071,6 +1083,7 @@ def main():
 
 def main_menu():
     check_player_data()
+    count_playtime()
 
     user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp', 'ld', 'x'],
                                      ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige',
