@@ -212,6 +212,7 @@ def load_save_file(filename):
         next(csv_file)
         attributes = ['key', 'value']
         csv_reader = csv.DictReader(csv_file, fieldnames=attributes)
+
         for line in csv_reader:
             key = line['key']
             value = line['value']
@@ -284,6 +285,11 @@ def remove_filetype(filename) -> str:
     str_list.pop(-1)
     filename = ''.join(str_list)
     return filename
+
+def load_save_file_ui():
+    filename = select_save_file()
+    filename = remove_filetype(filename)
+    load_save_file(filename)
 
 
 initialize_save_dir()
@@ -434,7 +440,7 @@ def check_player_xp():
         input()
 
 
-def print_skill_lv_bar():
+def print_skill_lv_bar(exit_to=None):
     while player.xp >= 100:
         if player.xp >= 100:
             player.xp -= 100
@@ -457,6 +463,10 @@ def print_skill_lv_bar():
 
     xp_untill_level_up = 100 - player.xp
     print(f'\n           XP bis zu Skill-Level {player.skill_lv + 1}:  {xp_untill_level_up}           ')
+    try:
+        exit_to()
+    except:
+        raise TypeError(f'Invalid exit target function fiven "{exit_to}". ')
 
 
 # -------------------------------------------- player ------------------------------------------
@@ -1085,42 +1095,40 @@ def main_menu():
     check_player_data()
     count_playtime()
 
-    user_selection = input_selection(['g', 's', 'b', 'c', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp', 'ld', 'x'],
+    user_selection = input_selection(['g', 's', 'b', 'cs', 'i', 'l', 'a', 'st', 'ch', 'c', 'sp', 'ld', 'x'],
                                      ['Game Starte', 'Shop', 'Bank', 'Casino', 'Inventar', 'Level ahzeige',
                                       'Achievements',
                                       'Statistike', 'Cheat Code igeh',
                                       'Credits', 'Spielstand Speichere', 'Spielstand Lade', 'Beände'],
                                      '\nWas wetsch du mache?  ')
-    if user_selection == 'g':
-        game()
-    if user_selection == 's':
-        shop()
-    if user_selection == 'b':
-        bank()
-    if user_selection == 'c':
-        casino()
-    if user_selection == 'i':
-        show_player_inventory()
-    if user_selection == 'l':
-        print_skill_lv_bar()
-        print()
-        input()
-        main_menu()  # I know, I know
-    if user_selection == 'a':
-        show_player_achievements('old')
-    if user_selection == 'st':
-        show_player_statistics()
-    if user_selection == 'ch':
-        enter_cheat_code()
-    if user_selection == 'c':
-        play_credits()
-    if user_selection == 'sp':
-        save_game_ui()
-    if user_selection == 'ld':
-        filename = select_save_file()
-        filename = remove_filetype(filename)
-        load_save_file(filename)
-    if user_selection == 'x':
+
+    selection_map = {'g': game,
+               's': shop,
+               'b': bank,
+               'cs': casino,
+               'i': show_player_inventory,
+               'l': print_skill_lv_bar,
+               'a': show_player_achievements,
+               'st': show_player_statistics,
+               'ch': enter_cheat_code,
+               'c': play_credits,
+               'sp': save_game_ui,
+               'ld': load_save_file_ui,
+               }
+
+    args_map = {print_skill_lv_bar: [main_menu],
+                show_player_achievements: ['old'],
+                }
+
+    args = []
+    if user_selection in selection_map.keys():
+        func = selection_map[user_selection]
+        if func in args_map.keys():
+            args = args_map[func]
+
+        selection_map[user_selection](*args)
+
+    elif user_selection == 'x':
         user_confirmation = input_selection(['y', 'n'], ['Ja', 'Nei'], 'Bisch der sicher? ')
         if user_confirmation == 'y':
             end_program(optional_message=None)
